@@ -127,14 +127,15 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
   <div class="board" id="board">
     <svg class="lines" id="lines" preserveAspectRatio="none"></svg>
     <div class="grid" id="grid"></div>
-    <div class="win" id="win" hidden><div class="big">🎉</div><b id="winT"></b><button class="btn primary" id="again"></button></div>
+    <div class="win" id="win" hidden><div class="big">🎉</div><b id="winT"></b><div class="controls"><button class="btn" id="again"></button><button class="btn primary" id="nextWin"></button></div></div>
   </div>
   <div class="bar">
     <span class="score" id="score"></span>
     <div class="controls">
       <button class="btn" id="hideBtn"></button>
       <button class="btn" id="hintBtn"></button>
-      <button class="btn primary" id="newBtn"></button>
+      <button class="btn" id="newBtn"></button>
+      <button class="btn primary" id="nextBtn"></button>
     </div>
   </div>
 </div>
@@ -158,11 +159,11 @@ const W=[
 const T={
  uz:{t:'Soʻz <span>ovchisi</span>',cats:{all:"Hammasi",a:"Hayvonlar",f:"Meva-sabzavot",o:"Narsalar"},
    lv:["Oson","Oʻrta","Qiyin"],found:(a,b)=>`Topildi: ${a} / ${b}`,hide:"Yozuvni yashir",show:"Yozuvni koʻrsat",
-   hint:"Yordam",nw:"Yangi oʻyin",win:"Barakalla!",lang:"Oʻzbekcha",
+   hint:"Yordam",nw:"Yangi oʻyin",nx:"Keyingi ▸",win:"Barakalla!",lang:"Oʻzbekcha",
    how:"Rasmga qarang va soʻzni jadvaldan toping. Barmoq bilan birinchi harfdan oxirgi harfgacha torting yoki birinchi va oxirgi harfga bosing. Har bir soʻz uchun 1–5 tanga beriladi: soʻz qanchalik uzun va qiyin joylashgan boʻlsa, shuncha koʻp. Tangalarni yordamga sarflash mumkin."},
  ru:{t:'Охотник <span>за словами</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы"},
    lv:["Легко","Средне","Сложно"],found:(a,b)=>`Найдено: ${a} / ${b}`,hide:"Скрыть слова",show:"Показать слова",
-   hint:"Подсказка",nw:"Новая игра",win:"Молодец!",lang:"Русский",
+   hint:"Подсказка",nw:"Новая игра",nx:"Дальше ▸",win:"Молодец!",lang:"Русский",
    how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки."}
 };
 const FILL={
@@ -192,7 +193,7 @@ const $=id=>document.getElementById(id);
 const rnd=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 
-function build(){
+function build(reset){
   const L=LEVELS[S.lv], n=L.n;
   let pool=W.filter(w=>S.cat==="all"||w[3]===S.cat).map(w=>({pic:w[0],word:S.lang==="ru"?w[1]:w[2]}))
     .map(o=>({...o,t:tok(o.word,S.lang)})).filter(o=>o.t.length>=3&&o.t.length<=n);
@@ -214,7 +215,7 @@ function build(){
   }
   const f=FILL[S.lang];
   for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!grid[r][c])grid[r][c]=f[rnd(f.length)];
-  G={n,grid,words:words.sort(()=>Math.random()-.5),ci:0,hintCost:HINT_START};pend=null;S.coins=0;
+  G={n,grid,words:words.sort(()=>Math.random()-.5),ci:0,hintCost:HINT_START};pend=null;if(reset)S.coins=0;
   render();
 }
 
@@ -232,7 +233,7 @@ function render(){
   $("lines").setAttribute("viewBox",`0 0 ${n} ${n}`);
   drawLines();
   $("hideBtn").textContent=S.hide?tr.show:tr.hide;
-  $("newBtn").textContent=tr.nw; $("again").textContent=tr.nw;
+  $("newBtn").textContent=tr.nw; $("again").textContent=tr.nw; $("nextBtn").textContent=tr.nx; $("nextWin").textContent=tr.nx;
   $("winT").textContent=tr.win; $("how").textContent=tr.how;
   updateScore();
 }
@@ -248,6 +249,7 @@ function updateScore(){
   const f=G.words.filter(w=>w.found).length;
   $("score").textContent=T[S.lang].found(f,G.words.length);
   $("win").hidden=f<G.words.length;
+  $("nextBtn").disabled=f<G.words.length;
 }
 function lineEl(r0,c0,r1,c1,color,cls){
   return `<line x1="${c0+.5}" y1="${r0+.5}" x2="${c1+.5}" y2="${r1+.5}" ${cls?`class="${cls}"`:`style="stroke:var(${color})"`}/>`;
@@ -311,7 +313,8 @@ document.addEventListener("click",e=>{
   if(b.dataset.lang){S.lang=b.dataset.lang;store.set("lang",S.lang);build()}
   else if(b.dataset.cat){S.cat=b.dataset.cat;store.set("cat",S.cat);build()}
   else if(b.dataset.lv){S.lv=+b.dataset.lv;store.set("lv",S.lv);build()}
-  else if(b.id==="newBtn"||b.id==="again")build();
+  else if(b.id==="newBtn"||b.id==="again")build(true);
+  else if(b.id==="nextBtn"||b.id==="nextWin")build(false);
   else if(b.id==="hideBtn"){S.hide=!S.hide;store.set("hide",S.hide?"1":"0");render()}
   else if(b.id==="setBtn"||b.id==="infoBtn"){
     const panels={setBtn:"settings",infoBtn:"infoPanel"};
