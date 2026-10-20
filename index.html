@@ -35,6 +35,11 @@ img{max-width:100%}
 :root[data-theme="dark"]{
   --bg:#121a26; --paper:#1a2535; --ink:#e3ecf8; --muted:#93a6c0; --line:#2c3b52;
   --accent:#6aa2ff; --accent-ink:#0d1520; --sel:#c9a12a; --hl-op:.5; color-scheme:dark}
+/* Board skins from the shop: self-contained colors, same in light and dark */
+[data-skin="sea"]{--board-bg:linear-gradient(160deg,#e3f6ff,#b5e3f8);--board-ink:#0a6694;--board-line:rgba(10,102,148,.18);--board-border:#1d9fd6}
+[data-skin="forest"]{--board-bg:linear-gradient(160deg,#eef8e6,#c9eab8);--board-ink:#2b6a2e;--board-line:rgba(43,106,46,.18);--board-border:#3f9b42}
+[data-skin="candy"]{--board-bg:linear-gradient(160deg,#fff1f7,#ffd3e6);--board-ink:#b0306c;--board-line:rgba(176,48,108,.16);--board-border:#ef5fa7}
+[data-skin="space"]{--board-bg:radial-gradient(circle at 18% 22%,rgba(255,255,255,.55) 0 1.5px,transparent 2.5px) 0 0/90px 90px,radial-gradient(circle at 70% 60%,rgba(255,255,255,.4) 0 1px,transparent 2px) 0 0/60px 60px,linear-gradient(160deg,#1b1442,#33246f);--board-ink:#ffe27a;--board-line:rgba(255,255,255,.12);--board-border:#8a6cff}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px}
 .wrap{max-width:620px;margin:0 auto;padding-block:18px 40px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
@@ -42,28 +47,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 h1{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0;letter-spacing:-.01em;text-wrap:balance}
 h1 span{color:var(--accent)}
-.seg{display:inline-flex;background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--paper);border:1.5px solid var(--line);border-radius:22px;padding:3px;gap:2px}
 .seg button{font:700 .9rem var(--body);border:0;background:none;color:var(--muted);padding:6px 12px;border-radius:999px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .seg button:focus-visible,.btn:focus-visible{outline:3px solid var(--sel);outline-offset:2px}
 .controls{display:flex;flex-wrap:wrap;gap:8px}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
-.card{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:8px 4px 6px;
+.card{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:8px 4px 6px;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .2s,opacity .3s}
+.card:active{transform:scale(.96)}
 .card .pic{font-size:2.2rem;line-height:1.1}
 .card .w{font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-align:center;word-break:break-word}
 .card.found{opacity:.55}
 .card.found .w{text-decoration:line-through;text-decoration-thickness:2px}
 .card.hint{transform:scale(1.08);border-color:var(--sel)}
 .hide-words .card:not(.found) .w{color:transparent;text-shadow:none;background:var(--line);border-radius:6px;min-width:60%}
-.board{position:relative;background:var(--paper);border:2px solid var(--accent);border-radius:12px;padding:6px;
+.board{position:relative;background:var(--board-bg,var(--paper));border:2px solid var(--board-border,var(--accent));border-radius:12px;padding:6px;
   container-type:inline-size;touch-action:none;user-select:none;-webkit-user-select:none}
 .grid{position:relative;display:grid;grid-template-columns:repeat(var(--n),1fr);z-index:1}
 .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
-  font-family:var(--display);font-weight:500;color:var(--accent);font-size:calc(100cqw / var(--n) * .5);cursor:pointer}
+  border-right:1px solid var(--board-line,var(--line));border-bottom:1px solid var(--board-line,var(--line));
+  font-family:var(--display);font-weight:500;color:var(--board-ink,var(--accent));font-size:calc(100cqw / var(--n) * .5);cursor:pointer}
 .cell.wide{font-size:calc(100cqw / var(--n) * .38)}
-.cell:nth-child(n){} .cell.lastc{border-right:0} .cell.lastr{border-bottom:0}
+.cell.lastc{border-right:0} .cell.lastr{border-bottom:0}
 .cell.pend{background:color-mix(in srgb,var(--sel) 60%,transparent);border-radius:50%}
 .cell.flash{animation:fl .5s 3}
 @keyframes fl{50%{background:var(--sel)}}
@@ -75,31 +81,43 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
 .btn{font:700 .95rem var(--body);border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
   padding:9px 16px;border-radius:12px;cursor:pointer}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .win{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
   background:color-mix(in srgb,var(--paper) 88%,transparent);border-radius:12px;text-align:center}
 .win b{font-family:var(--display);font-size:2rem;color:var(--accent)}
 .win .big{font-size:3.4rem;animation:pop .6s ease-out}
 @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
 .hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.coins{font-family:var(--display);font-weight:800;font-size:1.05rem;padding:7px 12px;border-radius:999px;
+.coins{font-family:var(--display);font-weight:800;font-size:1.05rem;padding:7px 12px;border-radius:999px;color:var(--ink);
   background:color-mix(in srgb,var(--gold) 24%,var(--paper));border:1.5px solid var(--gold);font-variant-numeric:tabular-nums;transition:transform .2s}
 .coins.bump{transform:scale(1.18)}
-.set-btn{width:42px;height:42px;padding:0;font-size:1.3rem;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
+.set-btn{width:42px;height:42px;padding:0;font-size:1.25rem;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
 .set-btn span{transition:transform .3s}
 .set-btn[aria-expanded="true"]{background:var(--accent);border-color:var(--accent)}
-.set-btn[aria-expanded="true"] span{transform:rotate(90deg)}
-.settings{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px}
+#setBtn[aria-expanded="true"] span{transform:rotate(90deg)}
+.panel{padding:12px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px}
+.settings{display:flex;flex-wrap:wrap;gap:8px}
 .settings .seg{background:var(--bg)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
 .gain{position:absolute;z-index:2;transform:translate(-50%,-50%);font-family:var(--display);font-weight:800;font-size:1.5rem;
   color:var(--ink);background:color-mix(in srgb,var(--gold) 55%,var(--paper));padding:2px 10px;border-radius:999px;pointer-events:none;
   animation:up 1.2s ease-out forwards}
 @keyframes up{0%{opacity:0;margin-top:10px}20%{opacity:1}100%{opacity:0;margin-top:-50px}}
 .card .val{font-size:.72rem;font-weight:700;color:var(--muted)}
 .how{color:var(--ink);font-size:.95rem;line-height:1.5;margin:0;max-width:60ch}
-.info-panel{padding:12px 14px;background:var(--paper);border:1.5px solid var(--line);border-radius:14px}
 .info-btn span{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:1.35rem;color:var(--accent)}
-.info-btn[aria-expanded="true"] span{color:var(--accent-ink);transform:none}
+.info-btn[aria-expanded="true"] span{color:var(--accent-ink)}
+.shop-head{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+.shop-head b{font-family:var(--display);font-size:1.15rem}
+.shop-head span{color:var(--muted);font-size:.88rem}
+.shop-sec{font:700 .78rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 0 6px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.item{display:flex;flex-direction:column;gap:6px;padding:8px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg)}
+.item .nm{font-weight:700;font-size:.92rem}
+.item .btn{padding:7px 10px;font-size:.88rem;width:100%}
+.sw{height:52px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  background:var(--board-bg,var(--paper));border:2px solid var(--board-border,var(--accent));
+  color:var(--board-ink,var(--accent));font:700 1.05rem var(--display);letter-spacing:.3em}
+.sw.emo{letter-spacing:.1em;font-size:1.4rem;background:var(--paper);border-color:var(--line)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -110,18 +128,22 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
     <h1 id="ttl">Soʻz <span>ovchisi</span></h1>
     <div class="hdr-r">
       <span class="coins" id="coinBox"><span aria-hidden="true">🪙</span> <b id="coins">0</b></span>
+      <button class="btn set-btn" id="shopBtn" aria-expanded="false" aria-controls="shop" aria-label="Doʻkon"><span aria-hidden="true">🛒</span></button>
       <button class="btn set-btn info-btn" id="infoBtn" aria-expanded="false" aria-controls="infoPanel" aria-label="Qoida"><span aria-hidden="true">i</span></button>
       <button class="btn set-btn" id="setBtn" aria-expanded="false" aria-controls="settings" aria-label="Sozlamalar"><span aria-hidden="true">⚙️</span></button>
     </div>
   </header>
-  <div class="info-panel" id="infoPanel" hidden><p class="how" id="how"></p></div>
-  <div class="settings" id="settings" hidden>
+  <div class="panel" id="infoPanel" hidden><p class="how" id="how"></p></div>
+  <div class="panel" id="shop" hidden></div>
+  <div class="panel settings" id="settings" hidden>
     <div class="seg" role="group" aria-label="Til">
       <button id="lang-uz" data-lang="uz">Oʻzbekcha</button>
       <button id="lang-ru" data-lang="ru">Русский</button>
     </div>
+    <div class="seg" role="group" id="modes"></div>
     <div class="seg" role="group" id="cats"></div>
     <div class="seg" role="group" id="levels"></div>
+    <div class="seg" role="group" id="sounds"></div>
   </div>
   <div class="cards" id="cards"></div>
   <div class="board" id="board">
@@ -152,19 +174,34 @@ const W=[
  ["🍑","ПЕРСИК","SHAFTOLI","f"],["🍓","КЛУБНИКА","QULUPNAY","f"],["🥕","МОРКОВЬ","SABZI","f"],["🍅","ПОМИДОР","POMIDOR","f"],
  ["🥒","ОГУРЕЦ","BODRING","f"],["🧅","ЛУК","PIYOZ","f"],
  ["📖","КНИГА","KITOB","o"],["✏️","КАРАНДАШ","QALAM","o"],["⚽","МЯЧ","TOʻP","o"],["🏠","ДОМ","UY","o"],
- ["🚗","МАШИНА","MASHINA","o"],["🔑","КЛЮЧ","KALIT","o"],["⏰","ЧАСЫ","SOAT","o"],["☂️","ЗОНТ","SOYABON","o"],
+ ["🔑","КЛЮЧ","KALIT","o"],["⏰","ЧАСЫ","SOAT","o"],["☂️","ЗОНТ","SOYABON","o"],
  ["🪑","СТУЛ","STUL","o"],["🥄","ЛОЖКА","QOSHIQ","o"],["🍞","ХЛЕБ","NON","o"],["☀️","СОЛНЦЕ","QUYOSH","o"],
- ["🌙","ЛУНА","OY","o"],["⭐","ЗВЕЗДА","YULDUZ","o"],["🌳","ДЕРЕВО","DARAXT","o"],["🌸","ЦВЕТОК","GUL","o"],["🚌","АВТОБУС","AVTOBUS","o"]
+ ["🌙","ЛУНА","OY","o"],["⭐","ЗВЕЗДА","YULDUZ","o"],["🌳","ДЕРЕВО","DARAXT","o"],["🌸","ЦВЕТОК","GUL","o"],
+ // bought in the shop
+ ["🚗","МАШИНА","MASHINA","t"],["🚌","АВТОБУС","AVTOBUS","t"],["🚲","ВЕЛОСИПЕД","VELOSIPED","t"],["✈️","САМОЛЁТ","SAMOLYOT","t"],
+ ["🚂","ПОЕЗД","POYEZD","t"],["🚢","КОРАБЛЬ","KEMA","t"],["🚁","ВЕРТОЛЁТ","VERTOLYOT","t"],["🚕","ТАКСИ","TAKSI","t"],
+ ["🚀","РАКЕТА","RAKETA","t"],["🚜","ТРАКТОР","TRAKTOR","t"],["🛵","МОПЕД","MOPED","t"],["🚤","ЛОДКА","QAYIQ","t"],
+ ["🧑‍⚕️","ВРАЧ","SHIFOKOR","k"],["🧑‍🍳","ПОВАР","OSHPAZ","k"],["🧑‍🏫","УЧИТЕЛЬ","OʻQITUVCHI","k"],["🧑‍🌾","ФЕРМЕР","FERMER","k"],
+ ["🧑‍✈️","ЛЁТЧИК","UCHUVCHI","k"],["👷","СТРОИТЕЛЬ","QURUVCHI","k"],["🧑‍🎨","ХУДОЖНИК","RASSOM","k"],["🧑‍🚀","КОСМОНАВТ","KOSMONAVT","k"],
+ ["🧑‍🔧","МЕХАНИК","MEXANIK","k"],["💇","ПАРИКМАХЕР","SARTAROSH","k"],["🧑‍💻","ПРОГРАММИСТ","DASTURCHI","k"],["👮","ПОЛИЦЕЙСКИЙ","MILITSIYA","k"]
 ];
 const T={
- uz:{t:'Soʻz <span>ovchisi</span>',cats:{all:"Hammasi",a:"Hayvonlar",f:"Meva-sabzavot",o:"Narsalar"},
+ uz:{t:'Soʻz <span>ovchisi</span>',cats:{all:"Hammasi",a:"Hayvonlar",f:"Meva-sabzavot",o:"Narsalar",t:"Transport",k:"Kasblar"},
    lv:["Oson","Oʻrta","Qiyin"],found:(a,b)=>`Topildi: ${a} / ${b}`,hide:"Yozuvni yashir",show:"Yozuvni koʻrsat",
    hint:"Yordam",nw:"Yangi oʻyin",nx:"Keyingi ▸",win:"Barakalla!",lang:"Oʻzbekcha",
-   how:"Rasmga qarang va soʻzni jadvaldan toping. Barmoq bilan birinchi harfdan oxirgi harfgacha torting yoki birinchi va oxirgi harfga bosing. Har bir soʻz uchun 1–5 tanga beriladi: soʻz qanchalik uzun va qiyin joylashgan boʻlsa, shuncha koʻp. Tangalarni yordamga sarflash mumkin."},
- ru:{t:'Охотник <span>за словами</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы"},
+   modes:["Bir til","Ikki til"],sounds:["🔊 Ovoz","🔇 Ovozsiz"],
+   shop:"Doʻkon",shopNote:"Tangalarga jadval bezagi va yangi mavzular oching. Sotib olinganlar saqlanib qoladi.",
+   secSkin:"Jadval bezagi",secCat:"Yangi mavzular",use:"Tanlash",inUse:"✓ Tanlangan",play:"Oʻynash ▸",
+   skins:{classic:"Oddiy",sea:"Dengiz",forest:"Oʻrmon",candy:"Shirinlik",space:"Kosmos"},
+   how:"Rasmga qarang va soʻzni jadvaldan toping. Barmoq bilan birinchi harfdan oxirgi harfgacha torting yoki birinchi va oxirgi harfga bosing. Har bir soʻz uchun 1–5 tanga beriladi: soʻz qanchalik uzun va qiyin joylashgan boʻlsa, shuncha koʻp. Tangalarni yordamga yoki 🛒 doʻkonda jadval bezagi va yangi mavzularga sarflang. «Ikki til» rejimida rasm ostidagi soʻz boshqa tilda yozilgan, uni jadvaldan tanlangan tilda toping. Kartochkaga bossangiz, soʻz ovoz chiqarib aytiladi."},
+ ru:{t:'Охотник <span>за словами</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы",t:"Транспорт",k:"Профессии"},
    lv:["Легко","Средне","Сложно"],found:(a,b)=>`Найдено: ${a} / ${b}`,hide:"Скрыть слова",show:"Показать слова",
    hint:"Подсказка",nw:"Новая игра",nx:"Дальше ▸",win:"Молодец!",lang:"Русский",
-   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки."}
+   modes:["Один язык","Два языка"],sounds:["🔊 Звук","🔇 Без звука"],
+   shop:"Магазин",shopNote:"За монеты открой новые оформления и темы. Покупки сохраняются.",
+   secSkin:"Оформление",secCat:"Новые темы",use:"Выбрать",inUse:"✓ Выбрано",play:"Играть ▸",
+   skins:{classic:"Обычное",sea:"Море",forest:"Лес",candy:"Сладости",space:"Космос"},
+   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки или в 🛒 магазине на оформление и новые темы. В режиме «Два языка» под картинкой слово на другом языке, а искать его нужно на выбранном языке. Нажми на карточку, и слово прозвучит вслух."}
 };
 const FILL={
  ru:"АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЬЭЮЯ".split(""),
@@ -173,9 +210,25 @@ const FILL={
 const LEVELS=[{n:9,k:6,d:[[0,1],[1,0]]},{n:11,k:8,d:[[0,1],[1,0],[1,1]]},
   {n:12,k:10,d:[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]]}];
 const COLORS=["--h1","--h2","--h3","--h4","--h5","--h6","--h7","--h8"];
+const SHOP=[
+ {id:"skin-classic",type:"skin",skin:"classic",price:0},
+ {id:"skin-sea",type:"skin",skin:"sea",price:20},
+ {id:"skin-forest",type:"skin",skin:"forest",price:20},
+ {id:"skin-candy",type:"skin",skin:"candy",price:25},
+ {id:"skin-space",type:"skin",skin:"space",price:40},
+ {id:"cat-t",type:"cat",cat:"t",price:30,emo:"🚲✈️🚀"},
+ {id:"cat-k",type:"cat",cat:"k",price:40,emo:"🧑‍🍳🧑‍🚀👷"}
+];
+const LOCKED={t:"cat-t",k:"cat-k"};
 
 const store={get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-let S={lang:store.get("lang","uz"),cat:store.get("cat","all"),lv:+store.get("lv","0"),hide:store.get("hide","0")==="1",coins:0};
+let owned;try{owned=new Set(JSON.parse(store.get("owned","[]")))}catch(e){owned=new Set()}
+owned.add("skin-classic");
+let S={lang:store.get("lang","uz"),cat:store.get("cat","all"),lv:+store.get("lv","0"),hide:store.get("hide","0")==="1",coins:0,
+  mode:store.get("mode","one"),sound:store.get("sound","1")==="1",skin:store.get("skin","classic")};
+const catOpen=c=>!LOCKED[c]||owned.has(LOCKED[c]);
+if(!catOpen(S.cat))S.cat="all";
+if(!owned.has("skin-"+S.skin))S.skin="classic";
 const HINT_START=5;
 function wordValue(w){
   const len=w.t.length;
@@ -189,13 +242,61 @@ let G=null, pend=null, drag=null;
 
 const tok=(w,lang)=>lang==="ru"?[...w]:w.match(/(Oʻ|Gʻ|SH|CH|.)/g);
 const show=t=>t.length>1&&t[1]!=="ʻ"?t[0]+t.slice(1).toLowerCase():t;
+const fmt=(word,lang)=>tok(word,lang).map(show).join("");
+const other=l=>l==="ru"?"uz":"ru";
 const $=id=>document.getElementById(id);
 const rnd=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 
+/* ---------- sound ---------- */
+let AC=null;
+function ac(){
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}
+  if(AC.state==="suspended")AC.resume();
+  return AC;
+}
+function tone(freq,start,dur,type="sine",vol=.18){
+  const a=ac();if(!a)return;
+  const t0=a.currentTime+start,o=a.createOscillator(),g=a.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol,t0+.012);g.gain.exponentialRampToValueAtTime(.001,t0+dur);
+  o.connect(g);g.connect(a.destination);o.start(t0);o.stop(t0+dur+.05);
+}
+const SFX={
+  find(){tone(784,0,.16);tone(1175,.1,.28)},
+  miss(){tone(196,0,.2,"triangle",.12)},
+  win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.12,.35));tone(1319,.5,.6)},
+  coin(){tone(1319,0,.09,"square",.06);tone(1760,.08,.18,"square",.06)},
+  hint(){tone(660,0,.12,"triangle",.14);tone(880,.1,.16,"triangle",.14)}
+};
+const sfx=n=>{if(S.sound)try{SFX[n]()}catch(e){}};
+const VO={};
+function loadVoices(){
+  const vs=speechSynthesis.getVoices();
+  VO.ru=vs.find(v=>/^ru/i.test(v.lang));
+  VO.uz=vs.find(v=>/^uz/i.test(v.lang))||vs.find(v=>/^tr/i.test(v.lang));
+}
+const canSpeak="speechSynthesis" in window;
+if(canSpeak){loadVoices();speechSynthesis.addEventListener?.("voiceschanged",loadVoices)}
+function say(word,lang){
+  if(!S.sound||!canSpeak)return;
+  const v=VO[lang];if(!v&&lang!=="ru")return;
+  const u=new SpeechSynthesisUtterance(word.toLowerCase().replace(/ʻ/g,"'"));
+  if(v)u.voice=v;u.lang=v?v.lang:"ru-RU";u.rate=.85;
+  speechSynthesis.speak(u);
+}
+function sayWord(w){
+  if(!S.sound||!canSpeak)return;
+  speechSynthesis.cancel();
+  say(w.word,S.lang);
+  if(S.mode==="bi")say(w.other,other(S.lang));
+}
+
+/* ---------- game ---------- */
 function build(reset){
-  const L=LEVELS[S.lv], n=L.n;
-  let pool=W.filter(w=>S.cat==="all"||w[3]===S.cat).map(w=>({pic:w[0],word:S.lang==="ru"?w[1]:w[2]}))
+  const L=LEVELS[S.lv], n=L.n, ol=other(S.lang);
+  let pool=W.filter(w=>S.cat==="all"?catOpen(w[3]):w[3]===S.cat)
+    .map(w=>({pic:w[0],word:S.lang==="ru"?w[1]:w[2],other:ol==="ru"?w[1]:w[2]}))
     .map(o=>({...o,t:tok(o.word,S.lang)})).filter(o=>o.t.length>=3&&o.t.length<=n);
   pool=shuffle(pool);
   const grid=Array.from({length:n},()=>Array(n).fill(null)), words=[];
@@ -219,15 +320,23 @@ function build(reset){
   render();
 }
 
+function seg(id,items,cur,attr){
+  $(id).innerHTML=items.map(([k,v])=>`<button id="${attr}-${k}" data-${attr}="${k}" aria-pressed="${String(k)===String(cur)}">${v}</button>`).join("");
+}
 function render(){
-  const tr=T[S.lang], n=G.n;
+  const tr=T[S.lang], n=G.n, ol=other(S.lang);
   document.documentElement.lang=S.lang;
   $("ttl").innerHTML=tr.t;
   document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===S.lang));
-  $("cats").innerHTML=Object.entries(tr.cats).map(([k,v])=>`<button id="cat-${k}" data-cat="${k}" aria-pressed="${k===S.cat}">${v}</button>`).join("");
-  $("levels").innerHTML=tr.lv.map((v,i)=>`<button id="lv-${i}" data-lv="${i}" aria-pressed="${i===S.lv}">${v}</button>`).join("");
+  seg("cats",Object.entries(tr.cats).map(([k,v])=>[k,catOpen(k)?v:"🔒 "+v]),S.cat,"cat");
+  seg("levels",tr.lv.map((v,i)=>[i,v]),S.lv,"lv");
+  seg("modes",[["one",tr.modes[0]],["bi",tr.modes[1]]],S.mode,"mode");
+  seg("sounds",[["1",tr.sounds[0]],["0",tr.sounds[1]]],S.sound?"1":"0","snd");
   $("app").classList.toggle("hide-words",S.hide);
-  $("cards").innerHTML=G.words.map((w,i)=>`<div class="card${w.found?" found":""}" id="card${i}"><div class="pic" aria-hidden="true">${w.pic}</div><div class="w">${w.t.map(show).join("")}</div><div class="val">🪙 ${w.val}</div></div>`).join("");
+  $("board").dataset.skin=S.skin;
+  $("cards").innerHTML=G.words.map((w,i)=>{
+    const label=S.mode==="bi"?fmt(w.other,ol):w.t.map(show).join("");
+    return `<div class="card${w.found?" found":""}" id="card${i}" data-i="${i}"><div class="pic" aria-hidden="true">${w.pic}</div><div class="w">${label}</div><div class="val">🪙 ${w.val}</div></div>`}).join("");
   const g=$("grid"); g.style.setProperty("--n",n);
   g.innerHTML=G.grid.flatMap((row,r)=>row.map((t,c)=>`<div class="cell${t.length>1?" wide":""}${c===n-1?" lastc":""}${r===n-1?" lastr":""}" data-r="${r}" data-c="${c}">${show(t)}</div>`)).join("");
   $("lines").setAttribute("viewBox",`0 0 ${n} ${n}`);
@@ -235,13 +344,33 @@ function render(){
   $("hideBtn").textContent=S.hide?tr.show:tr.hide;
   $("newBtn").textContent=tr.nw; $("again").textContent=tr.nw; $("nextBtn").textContent=tr.nx; $("nextWin").textContent=tr.nx;
   $("winT").textContent=tr.win; $("how").textContent=tr.how;
+  $("shopBtn").setAttribute("aria-label",tr.shop);
   updateScore();
+}
+function renderShop(){
+  const tr=T[S.lang];
+  const item=it=>{
+    const has=owned.has(it.id);let btn;
+    if(it.type==="skin"){
+      btn=!has?`<button class="btn primary" data-buy="${it.id}" ${S.coins<it.price?"disabled":""}>🪙 ${it.price}</button>`
+        :S.skin===it.skin?`<button class="btn" disabled>${tr.inUse}</button>`
+        :`<button class="btn" data-skinpick="${it.skin}">${tr.use}</button>`;
+      return `<div class="item"><div class="sw" data-skin="${it.skin}">A B V</div><div class="nm">${tr.skins[it.skin]}</div>${btn}</div>`;
+    }
+    btn=!has?`<button class="btn primary" data-buy="${it.id}" ${S.coins<it.price?"disabled":""}>🪙 ${it.price}</button>`
+      :`<button class="btn" data-play="${it.cat}">${tr.play}</button>`;
+    return `<div class="item"><div class="sw emo">${it.emo}</div><div class="nm">${tr.cats[it.cat]}</div>${btn}</div>`;
+  };
+  $("shop").innerHTML=`<div class="shop-head"><b>${tr.shop}</b><span>${tr.shopNote}</span></div>
+    <div class="shop-sec">${tr.secSkin}</div><div class="shop-grid">${SHOP.filter(i=>i.type==="skin").map(item).join("")}</div>
+    <div class="shop-sec">${tr.secCat}</div><div class="shop-grid">${SHOP.filter(i=>i.type==="cat").map(item).join("")}</div>`;
 }
 function updateCoins(bump){
   $("coins").textContent=S.coins;
   const left=G.words.some(w=>!w.found);
   $("hintBtn").textContent=`${T[S.lang].hint} · 🪙${G.hintCost}`;
   $("hintBtn").disabled=S.coins<G.hintCost||!left;
+  if(!$("shop").hidden)renderShop();
   if(bump){const b=$("coinBox");b.classList.add("bump");setTimeout(()=>b.classList.remove("bump"),220)}
 }
 function updateScore(){
@@ -273,19 +402,21 @@ function tryWord(a,b){
   const w=G.words.find(w=>!w.found&&(w.t.join("|")===s||w.t.join("|")===rs));
   if(!w)return false;
   w.found=true;w.color=COLORS[G.ci++%COLORS.length];
-  // keep the drawn line on the word's own cells
   $("card"+G.words.indexOf(w)).classList.add("found");
   S.coins+=w.val;
   const g=document.createElement("div");g.className="gain";g.textContent=`+${w.val} 🪙`;
   g.style.left=`calc(6px + (100% - 12px) * ${((w.c0+w.c1)/2+.5)/G.n})`;
   g.style.top=`calc(6px + (100% - 12px) * ${((w.r0+w.r1)/2+.5)/G.n})`;
   board.appendChild(g);setTimeout(()=>g.remove(),1300);
-  drawLines();updateScore();updateCoins(true);return true;
+  drawLines();updateScore();updateCoins(true);
+  if(G.words.every(x=>x.found)){sfx("win");sayWord(w)}else{sfx("find");sayWord(w)}
+  return true;
 }
 function clearPend(){document.querySelectorAll(".cell.pend").forEach(c=>c.classList.remove("pend"))}
 
 const board=$("board");
 board.addEventListener("pointerdown",e=>{
+  ac();
   const p=cellAt(e.clientX,e.clientY);if(!p)return;
   drag={a:p,b:p};board.setPointerCapture(e.pointerId);drawLines([...p,...p]);
 });
@@ -297,35 +428,55 @@ function endDrag(){
   if(!drag)return;const {a,b}=drag;drag=null;
   if(a[0]===b[0]&&a[1]===b[1]){
     if(pend&&!(pend[0]===a[0]&&pend[1]===a[1])){
-      const e2=snap(pend,a);clearPend();const ok=tryWord(pend,e2);pend=null;if(!ok)drawLines();return;
+      const e2=snap(pend,a);clearPend();const ok=tryWord(pend,e2);pend=null;if(!ok){drawLines();sfx("miss")}return;
     }
     clearPend();
     if(pend){pend=null;drawLines();return}
     pend=a;document.querySelector(`.cell[data-r="${a[0]}"][data-c="${a[1]}"]`).classList.add("pend");drawLines();return;
   }
-  pend=null;clearPend();if(!tryWord(a,b))drawLines();
+  pend=null;clearPend();if(!tryWord(a,b)){drawLines();sfx("miss")}
 }
 board.addEventListener("pointerup",endDrag);
 board.addEventListener("pointercancel",()=>{drag=null;drawLines()});
 
+function openPanel(id){
+  const panels={setBtn:"settings",infoBtn:"infoPanel",shopBtn:"shop"};
+  for(const [btn,pid] of Object.entries(panels)){
+    const open=btn===id&&$(pid).hidden;
+    $(pid).hidden=!open;$(btn).setAttribute("aria-expanded",open);
+  }
+  if(!$("shop").hidden)renderShop();
+}
+function saveOwned(){store.set("owned",JSON.stringify([...owned]))}
+
 document.addEventListener("click",e=>{
+  ac();
+  const card=e.target.closest(".card");
+  if(card){const w=G.words[+card.dataset.i];if(w&&(!S.hide||w.found))sayWord(w);return}
   const b=e.target.closest("button");if(!b)return;
   if(b.dataset.lang){S.lang=b.dataset.lang;store.set("lang",S.lang);build()}
-  else if(b.dataset.cat){S.cat=b.dataset.cat;store.set("cat",S.cat);build()}
+  else if(b.dataset.cat){
+    if(!catOpen(b.dataset.cat)){openPanel("shopBtn");return}
+    S.cat=b.dataset.cat;store.set("cat",S.cat);build()}
   else if(b.dataset.lv){S.lv=+b.dataset.lv;store.set("lv",S.lv);build()}
+  else if(b.dataset.mode){S.mode=b.dataset.mode;store.set("mode",S.mode);render()}
+  else if(b.dataset.snd){S.sound=b.dataset.snd==="1";store.set("sound",S.sound?"1":"0");render();if(S.sound)sfx("coin");else if(canSpeak)speechSynthesis.cancel()}
+  else if(b.dataset.buy){
+    const it=SHOP.find(i=>i.id===b.dataset.buy);if(!it||owned.has(it.id)||S.coins<it.price)return;
+    S.coins-=it.price;owned.add(it.id);saveOwned();sfx("coin");
+    if(it.type==="skin"){S.skin=it.skin;store.set("skin",S.skin);$("board").dataset.skin=S.skin}
+    else render();
+    updateCoins(true);renderShop();
+  }
+  else if(b.dataset.skinpick){S.skin=b.dataset.skinpick;store.set("skin",S.skin);$("board").dataset.skin=S.skin;renderShop()}
+  else if(b.dataset.play){S.cat=b.dataset.play;store.set("cat",S.cat);openPanel("");build()}
   else if(b.id==="newBtn"||b.id==="again")build(true);
   else if(b.id==="nextBtn"||b.id==="nextWin")build(false);
   else if(b.id==="hideBtn"){S.hide=!S.hide;store.set("hide",S.hide?"1":"0");render()}
-  else if(b.id==="setBtn"||b.id==="infoBtn"){
-    const panels={setBtn:"settings",infoBtn:"infoPanel"};
-    for(const [btn,pid] of Object.entries(panels)){
-      const open=btn===b.id&&$(pid).hidden;
-      $(pid).hidden=!open;$(btn).setAttribute("aria-expanded",open);
-    }
-  }
+  else if(b.id==="setBtn"||b.id==="infoBtn"||b.id==="shopBtn")openPanel(b.id);
   else if(b.id==="hintBtn"){
     const left=G.words.filter(w=>!w.found);if(!left.length||S.coins<G.hintCost)return;
-    S.coins-=G.hintCost;G.hintCost++;updateCoins(true);
+    S.coins-=G.hintCost;G.hintCost++;updateCoins(true);sfx("hint");
     const w=left[rnd(left.length)],i=G.words.indexOf(w);
     const cell=document.querySelector(`.cell[data-r="${w.r0}"][data-c="${w.c0}"]`);
     const card=$("card"+i);
