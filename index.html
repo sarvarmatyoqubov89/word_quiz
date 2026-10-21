@@ -26,15 +26,15 @@ img{max-width:100%}
   --bg:#eef4fb; --paper:#ffffff; --ink:#1f3552; --muted:#5d7391; --line:#c9d8ea;
   --accent:#2f6fd0; --accent-ink:#ffffff; --sel:#ffd34d;
   --h1:#ff9f8f; --h2:#8fd3a8; --h3:#9fc1ff; --h4:#ffcf6e; --h5:#d4a6f2; --h6:#7fd8d8; --h7:#f6a6cf; --h8:#c3d97a;
-  --hl-op:.55; --gold:#e8a800;
+  --hl-op:.55; --gold:#e8a800; --warn:#d93a3a;
   --display:"Rubik",system-ui,sans-serif; --body:"Nunito",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#121a26; --paper:#1a2535; --ink:#e3ecf8; --muted:#93a6c0; --line:#2c3b52;
-  --accent:#6aa2ff; --accent-ink:#0d1520; --sel:#c9a12a; --hl-op:.5; color-scheme:dark}}
+  --accent:#6aa2ff; --accent-ink:#0d1520; --sel:#c9a12a; --hl-op:.5; --warn:#ff6b6b; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#121a26; --paper:#1a2535; --ink:#e3ecf8; --muted:#93a6c0; --line:#2c3b52;
-  --accent:#6aa2ff; --accent-ink:#0d1520; --sel:#c9a12a; --hl-op:.5; color-scheme:dark}
+  --accent:#6aa2ff; --accent-ink:#0d1520; --sel:#c9a12a; --hl-op:.5; --warn:#ff6b6b; color-scheme:dark}
 /* Board skins from the shop: self-contained colors, same in light and dark */
 [data-skin="sea"]{--board-bg:linear-gradient(160deg,#e3f6ff,#b5e3f8);--board-ink:#0a6694;--board-line:rgba(10,102,148,.18);--board-border:#1d9fd6}
 [data-skin="forest"]{--board-bg:linear-gradient(160deg,#eef8e6,#c9eab8);--board-ink:#2b6a2e;--board-line:rgba(43,106,46,.18);--board-border:#3f9b42}
@@ -118,6 +118,42 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
   background:var(--board-bg,var(--paper));border:2px solid var(--board-border,var(--accent));
   color:var(--board-ink,var(--accent));font:700 1.05rem var(--display);letter-spacing:.3em}
 .sw.emo{letter-spacing:.1em;font-size:1.4rem;background:var(--paper);border-color:var(--line)}
+.card .pic img{width:2.6rem;height:2.6rem;object-fit:cover;border-radius:10px;display:block}
+.empty{grid-column:1/-1;margin:0;padding:12px;color:var(--muted);text-align:center;background:var(--paper);border:1.5px dashed var(--line);border-radius:14px}
+.timer{display:flex;flex-direction:column;gap:8px}
+.t-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.t-clock{font:800 1.7rem var(--display);font-variant-numeric:tabular-nums;min-width:4.2ch}
+.t-stats{font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.t-prog{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.t-prog i{display:block;height:100%;width:100%;background:var(--accent);border-radius:99px;transition:width .25s linear}
+.t-tip{font-size:.85rem;color:var(--muted)}
+.timer.warn .t-clock{color:var(--warn)}
+.timer.warn .t-prog i{background:var(--warn)}
+.win p{margin:0;font-weight:700;font-size:1.1rem}
+.win .rec{color:var(--gold);font-family:var(--display);font-weight:800}
+.full{width:100%}
+.p-title{font-family:var(--display);font-size:1.15rem;display:block;margin-bottom:4px}
+.p-note{color:var(--muted);font-size:.88rem;margin:0 0 10px}
+.gate{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.inp{font:600 1rem var(--body);color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;min-width:0}
+.inp:focus{outline:3px solid var(--sel);outline-offset:1px}
+.p-form{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:center}
+.p-form .actions{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+@media (max-width:460px){.p-form{grid-template-columns:auto 1fr}.p-form .ru{grid-column:2}}
+.pic-pick{width:56px;height:56px;border-radius:12px;border:1.5px dashed var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;cursor:pointer;overflow:hidden;position:relative}
+.pic-pick img{width:100%;height:100%;object-fit:cover}
+.pic-pick input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.err{color:var(--warn);font-weight:700;font-size:.88rem}
+.p-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.p-list li{display:flex;align-items:center;gap:10px;padding:6px 8px;background:var(--bg);border-radius:10px}
+.p-list .pp{width:36px;height:36px;font-size:1.6rem;display:flex;align-items:center;justify-content:center}
+.p-list .pp img{width:36px;height:36px;object-fit:cover;border-radius:8px}
+.p-list .wd{flex:1;min-width:0;font-weight:700;overflow-wrap:anywhere}
+.p-list .wd span{color:var(--muted);font-weight:600}
+.p-list button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:8px}
+.p-list button:hover{color:var(--warn)}
+.emo-in{width:56px;text-align:center;font-size:1.4rem;padding:8px 4px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -143,12 +179,21 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
     <div class="seg" role="group" id="modes"></div>
     <div class="seg" role="group" id="cats"></div>
     <div class="seg" role="group" id="levels"></div>
+    <div class="seg" role="group" id="plays"></div>
     <div class="seg" role="group" id="sounds"></div>
+    <button class="btn" id="parentBtn" aria-expanded="false" aria-controls="parent"></button>
+  </div>
+  <div class="panel" id="parent" hidden></div>
+  <div class="panel timer" id="timer" hidden>
+    <div class="t-row"><span class="t-clock" id="tClock">2:00</span><span class="t-stats" id="tStats"></span></div>
+    <div class="t-prog"><i id="tProg"></i></div>
+    <span class="t-tip" id="tTip"></span>
   </div>
   <div class="cards" id="cards"></div>
   <div class="board" id="board">
     <svg class="lines" id="lines" preserveAspectRatio="none"></svg>
     <div class="grid" id="grid"></div>
+    <div class="win" id="timeup" hidden><div class="big">⏰</div><b id="tuT"></b><p id="tuN"></p><span class="rec" id="tuR"></span><button class="btn primary" id="tuAgain"></button></div>
     <div class="win" id="win" hidden><div class="big">🎉</div><b id="winT"></b><div class="controls"><button class="btn" id="again"></button><button class="btn primary" id="nextWin"></button></div></div>
   </div>
   <div class="bar">
@@ -186,22 +231,38 @@ const W=[
  ["🧑‍🔧","МЕХАНИК","MEXANIK","k"],["💇","ПАРИКМАХЕР","SARTAROSH","k"],["🧑‍💻","ПРОГРАММИСТ","DASTURCHI","k"],["👮","ПОЛИЦЕЙСКИЙ","MILITSIYA","k"]
 ];
 const T={
- uz:{t:'Soʻz <span>ovchisi</span>',cats:{all:"Hammasi",a:"Hayvonlar",f:"Meva-sabzavot",o:"Narsalar",t:"Transport",k:"Kasblar"},
+ uz:{t:'Soʻz <span>ovchisi</span>',cats:{all:"Hammasi",a:"Hayvonlar",f:"Meva-sabzavot",o:"Narsalar",t:"Transport",k:"Kasblar",m:"⭐ Mening soʻzlarim"},
    lv:["Oson","Oʻrta","Qiyin"],found:(a,b)=>`Topildi: ${a} / ${b}`,hide:"Yozuvni yashir",show:"Yozuvni koʻrsat",
    hint:"Yordam",nw:"Yangi oʻyin",nx:"Keyingi ▸",win:"Barakalla!",lang:"Oʻzbekcha",
-   modes:["Bir til","Ikki til"],sounds:["🔊 Ovoz","🔇 Ovozsiz"],
+   modes:["Bir til","Ikki til"],sounds:["🔊 Ovoz","🔇 Ovozsiz"],plays:["🧩 Oddiy","⏱ 2 daqiqa"],
+   tTip:"Birinchi soʻzni belgilang, vaqt shunda boshlanadi.",tStats:(n,b)=>`Topildi: ${n} · 🏆 Rekord: ${b}`,
+   tuT:"Vaqt tugadi!",tuN:n=>`2 daqiqada ${n} ta soʻz topdingiz`,tuRec:"🏆 Yangi rekord!",tuBest:b=>`Rekord: ${b}`,tuAgain:"Yana oʻynash",
+   empty:"Bu mavzuda bu til uchun soʻz yoʻq. Ota-ona boʻlimida soʻz qoʻshing yoki boshqa mavzuni tanlang.",
+   parent:"👪 Ota-ona boʻlimi",pTitle:"Ota-ona boʻlimi",gateQ:(a,b)=>`Kattalar uchun: ${a} × ${b} = ?`,gateOk:"Ochish",gateErr:"Javob notoʻgʻri",
+   pNote:"Oʻz soʻzlaringizni qoʻshing: oila aʼzolarining ismlari, maktab lugʻati va boshqalar. Bitta yoki ikkala tilda yozing. Rasm qoʻyish ixtiyoriy: emoji yozing yoki surat yuklang. Soʻzlar «⭐ Mening soʻzlarim» mavzusida chiqadi.",
+   pUz:"Oʻzbekcha (lotin)",pRu:"Ruscha (kirill)",pAdd:"Qoʻshish",pPhoto:"Surat",pNone:"Hali soʻz qoʻshilmagan.",
+   eNeed:"Kamida bitta tilda soʻz yozing.",eLen:"Soʻz 3 tadan 12 tagacha harf boʻlsin.",eUz:"Oʻzbekcha soʻzda faqat lotin harflari boʻlsin (boʻsh joysiz).",
+   eRu:"Ruscha soʻzda faqat kirill harflari boʻlsin (boʻsh joysiz).",eMax:"Koʻpi bilan 60 ta soʻz qoʻshish mumkin.",eImg:"Suratni ochib boʻlmadi.",
    shop:"Doʻkon",shopNote:"Tangalarga jadval bezagi va yangi mavzular oching. Sotib olinganlar saqlanib qoladi.",
    secSkin:"Jadval bezagi",secCat:"Yangi mavzular",use:"Tanlash",inUse:"✓ Tanlangan",play:"Oʻynash ▸",
    skins:{classic:"Oddiy",sea:"Dengiz",forest:"Oʻrmon",candy:"Shirinlik",space:"Kosmos"},
-   how:"Rasmga qarang va soʻzni jadvaldan toping. Barmoq bilan birinchi harfdan oxirgi harfgacha torting yoki birinchi va oxirgi harfga bosing. Har bir soʻz uchun 1–5 tanga beriladi: soʻz qanchalik uzun va qiyin joylashgan boʻlsa, shuncha koʻp. Tangalarni yordamga yoki 🛒 doʻkonda jadval bezagi va yangi mavzularga sarflang. «Ikki til» rejimida rasm ostidagi soʻz boshqa tilda yozilgan, uni jadvaldan tanlangan tilda toping. Kartochkaga bossangiz, soʻz ovoz chiqarib aytiladi."},
- ru:{t:'Охотник <span>за словами</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы",t:"Транспорт",k:"Профессии"},
+   how:"Rasmga qarang va soʻzni jadvaldan toping. Barmoq bilan birinchi harfdan oxirgi harfgacha torting yoki birinchi va oxirgi harfga bosing. Har bir soʻz uchun 1–5 tanga beriladi: soʻz qanchalik uzun va qiyin joylashgan boʻlsa, shuncha koʻp. Tangalarni yordamga yoki 🛒 doʻkonda jadval bezagi va yangi mavzularga sarflang. «Ikki til» rejimida rasm ostidagi soʻz boshqa tilda yozilgan, uni jadvaldan tanlangan tilda toping. Kartochkaga bossangiz, soʻz ovoz chiqarib aytiladi. «⏱ 2 daqiqa» rejimida vaqt tugaguncha imkon qadar koʻp soʻz toping: jadval tugasa, yangisi oʻzi ochiladi, eng yaxshi natija saqlanadi. Ota-onalar sozlamalardagi «👪 Ota-ona boʻlimi»da oʻz soʻzlarini qoʻshishi mumkin."},
+ ru:{t:'Охотник <span>за словами</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы",t:"Транспорт",k:"Профессии",m:"⭐ Мои слова"},
    lv:["Легко","Средне","Сложно"],found:(a,b)=>`Найдено: ${a} / ${b}`,hide:"Скрыть слова",show:"Показать слова",
    hint:"Подсказка",nw:"Новая игра",nx:"Дальше ▸",win:"Молодец!",lang:"Русский",
-   modes:["Один язык","Два языка"],sounds:["🔊 Звук","🔇 Без звука"],
+   modes:["Один язык","Два языка"],sounds:["🔊 Звук","🔇 Без звука"],plays:["🧩 Обычный","⏱ 2 минуты"],
+   tTip:"Отметь первое слово, и время пойдёт.",tStats:(n,b)=>`Найдено: ${n} · 🏆 Рекорд: ${b}`,
+   tuT:"Время вышло!",tuN:n=>`За 2 минуты найдено слов: ${n}`,tuRec:"🏆 Новый рекорд!",tuBest:b=>`Рекорд: ${b}`,tuAgain:"Играть ещё",
+   empty:"В этой теме нет слов на этом языке. Добавьте слова в разделе для родителей или выберите другую тему.",
+   parent:"👪 Для родителей",pTitle:"Для родителей",gateQ:(a,b)=>`Для взрослых: ${a} × ${b} = ?`,gateOk:"Открыть",gateErr:"Неверный ответ",
+   pNote:"Добавьте свои слова: имена членов семьи, школьные слова и другое. Пишите на одном или обоих языках. Картинка по желанию: эмодзи или фото. Слова появятся в теме «⭐ Мои слова».",
+   pUz:"Узбекский (латиница)",pRu:"Русский (кириллица)",pAdd:"Добавить",pPhoto:"Фото",pNone:"Слов пока нет.",
+   eNeed:"Напишите слово хотя бы на одном языке.",eLen:"В слове должно быть от 3 до 12 букв.",eUz:"В узбекском слове только латинские буквы (без пробелов).",
+   eRu:"В русском слове только кириллица (без пробелов).",eMax:"Можно добавить не больше 60 слов.",eImg:"Не удалось открыть фото.",
    shop:"Магазин",shopNote:"За монеты открой новые оформления и темы. Покупки сохраняются.",
    secSkin:"Оформление",secCat:"Новые темы",use:"Выбрать",inUse:"✓ Выбрано",play:"Играть ▸",
    skins:{classic:"Обычное",sea:"Море",forest:"Лес",candy:"Сладости",space:"Космос"},
-   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки или в 🛒 магазине на оформление и новые темы. В режиме «Два языка» под картинкой слово на другом языке, а искать его нужно на выбранном языке. Нажми на карточку, и слово прозвучит вслух."}
+   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки или в 🛒 магазине на оформление и новые темы. В режиме «Два языка» под картинкой слово на другом языке, а искать его нужно на выбранном языке. Нажми на карточку, и слово прозвучит вслух. В режиме «⏱ 2 минуты» найди как можно больше слов: когда таблица закончится, сразу откроется новая, лучший результат сохраняется. Родители могут добавить свои слова в настройках, раздел «👪 Для родителей»."}
 };
 const FILL={
  ru:"АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЬЭЮЯ".split(""),
@@ -225,9 +286,14 @@ const store={get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},
 let owned;try{owned=new Set(JSON.parse(store.get("owned","[]")))}catch(e){owned=new Set()}
 owned.add("skin-classic");
 let S={lang:store.get("lang","uz"),cat:store.get("cat","all"),lv:+store.get("lv","0"),hide:store.get("hide","0")==="1",coins:0,
-  mode:store.get("mode","one"),sound:store.get("sound","1")==="1",skin:store.get("skin","classic")};
+  mode:store.get("mode","one"),sound:store.get("sound","1")==="1",skin:store.get("skin","classic"),play:store.get("play","normal")};
+let CUSTOM;try{CUSTOM=JSON.parse(store.get("custom","[]"))}catch(e){CUSTOM=[]}
+const saveCustom=()=>store.set("custom",JSON.stringify(CUSTOM));
+const allWords=()=>W.concat(CUSTOM.map(c=>[c.img?{img:c.img}:(c.emo||"📝"),c.ru||"",c.uz||"","m"]));
+const picHTML=p=>typeof p==="object"?`<img src="${p.img}" alt="">`:p;
 const catOpen=c=>!LOCKED[c]||owned.has(LOCKED[c]);
-if(!catOpen(S.cat))S.cat="all";
+const catShown=c=>c!=="m"||CUSTOM.length>0;
+if(!catOpen(S.cat)||!catShown(S.cat))S.cat="all";
 if(!owned.has("skin-"+S.skin))S.skin="classic";
 const HINT_START=5;
 function wordValue(w){
@@ -267,7 +333,9 @@ const SFX={
   miss(){tone(196,0,.2,"triangle",.12)},
   win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.12,.35));tone(1319,.5,.6)},
   coin(){tone(1319,0,.09,"square",.06);tone(1760,.08,.18,"square",.06)},
-  hint(){tone(660,0,.12,"triangle",.14);tone(880,.1,.16,"triangle",.14)}
+  hint(){tone(660,0,.12,"triangle",.14);tone(880,.1,.16,"triangle",.14)},
+  tick(){tone(1000,0,.06,"square",.05)},
+  end(){tone(523,0,.25,"triangle",.16);tone(392,.22,.45,"triangle",.16)}
 };
 const sfx=n=>{if(S.sound)try{SFX[n]()}catch(e){}};
 const VO={};
@@ -295,8 +363,9 @@ function sayWord(w){
 /* ---------- game ---------- */
 function build(reset){
   const L=LEVELS[S.lv], n=L.n, ol=other(S.lang);
-  let pool=W.filter(w=>S.cat==="all"?catOpen(w[3]):w[3]===S.cat)
+  let pool=allWords().filter(w=>S.cat==="all"?catOpen(w[3]):w[3]===S.cat)
     .map(w=>({pic:w[0],word:S.lang==="ru"?w[1]:w[2],other:ol==="ru"?w[1]:w[2]}))
+    .filter(o=>o.word&&(S.mode!=="bi"||o.other))
     .map(o=>({...o,t:tok(o.word,S.lang)})).filter(o=>o.t.length>=3&&o.t.length<=n);
   pool=shuffle(pool);
   const grid=Array.from({length:n},()=>Array(n).fill(null)), words=[];
@@ -328,7 +397,9 @@ function render(){
   document.documentElement.lang=S.lang;
   $("ttl").innerHTML=tr.t;
   document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===S.lang));
-  seg("cats",Object.entries(tr.cats).map(([k,v])=>[k,catOpen(k)?v:"🔒 "+v]),S.cat,"cat");
+  seg("cats",Object.entries(tr.cats).filter(([k])=>catShown(k)).map(([k,v])=>[k,catOpen(k)?v:"🔒 "+v]),S.cat,"cat");
+  seg("plays",[["normal",tr.plays[0]],["time",tr.plays[1]]],S.play,"play");
+  $("parentBtn").textContent=tr.parent;
   seg("levels",tr.lv.map((v,i)=>[i,v]),S.lv,"lv");
   seg("modes",[["one",tr.modes[0]],["bi",tr.modes[1]]],S.mode,"mode");
   seg("sounds",[["1",tr.sounds[0]],["0",tr.sounds[1]]],S.sound?"1":"0","snd");
@@ -336,7 +407,7 @@ function render(){
   $("board").dataset.skin=S.skin;
   $("cards").innerHTML=G.words.map((w,i)=>{
     const label=S.mode==="bi"?fmt(w.other,ol):w.t.map(show).join("");
-    return `<div class="card${w.found?" found":""}" id="card${i}" data-i="${i}"><div class="pic" aria-hidden="true">${w.pic}</div><div class="w">${label}</div><div class="val">🪙 ${w.val}</div></div>`}).join("");
+    return `<div class="card${w.found?" found":""}" id="card${i}" data-i="${i}"><div class="pic" aria-hidden="true">${picHTML(w.pic)}</div><div class="w">${label}</div><div class="val">🪙 ${w.val}</div></div>`}).join("")||`<p class="empty">${tr.empty}</p>`;
   const g=$("grid"); g.style.setProperty("--n",n);
   g.innerHTML=G.grid.flatMap((row,r)=>row.map((t,c)=>`<div class="cell${t.length>1?" wide":""}${c===n-1?" lastc":""}${r===n-1?" lastr":""}" data-r="${r}" data-c="${c}">${show(t)}</div>`)).join("");
   $("lines").setAttribute("viewBox",`0 0 ${n} ${n}`);
@@ -345,6 +416,10 @@ function render(){
   $("newBtn").textContent=tr.nw; $("again").textContent=tr.nw; $("nextBtn").textContent=tr.nx; $("nextWin").textContent=tr.nx;
   $("winT").textContent=tr.win; $("how").textContent=tr.how;
   $("shopBtn").setAttribute("aria-label",tr.shop);
+  $("tuT").textContent=tr.tuT; $("tuAgain").textContent=tr.tuAgain; $("tTip").textContent=tr.tTip;
+  $("nextBtn").hidden=S.play==="time";
+  renderTimer();
+  if(!$("parent").hidden)renderParent();
   updateScore();
 }
 function renderShop(){
@@ -358,7 +433,7 @@ function renderShop(){
       return `<div class="item"><div class="sw" data-skin="${it.skin}">A B V</div><div class="nm">${tr.skins[it.skin]}</div>${btn}</div>`;
     }
     btn=!has?`<button class="btn primary" data-buy="${it.id}" ${S.coins<it.price?"disabled":""}>🪙 ${it.price}</button>`
-      :`<button class="btn" data-play="${it.cat}">${tr.play}</button>`;
+      :`<button class="btn" data-playcat="${it.cat}">${tr.play}</button>`;
     return `<div class="item"><div class="sw emo">${it.emo}</div><div class="nm">${tr.cats[it.cat]}</div>${btn}</div>`;
   };
   $("shop").innerHTML=`<div class="shop-head"><b>${tr.shop}</b><span>${tr.shopNote}</span></div>
@@ -369,7 +444,7 @@ function updateCoins(bump){
   $("coins").textContent=S.coins;
   const left=G.words.some(w=>!w.found);
   $("hintBtn").textContent=`${T[S.lang].hint} · 🪙${G.hintCost}`;
-  $("hintBtn").disabled=S.coins<G.hintCost||!left;
+  $("hintBtn").disabled=S.coins<G.hintCost||!left||(S.play==="time"&&TM&&TM.over);
   if(!$("shop").hidden)renderShop();
   if(bump){const b=$("coinBox");b.classList.add("bump");setTimeout(()=>b.classList.remove("bump"),220)}
 }
@@ -377,8 +452,9 @@ function updateScore(){
   updateCoins();
   const f=G.words.filter(w=>w.found).length;
   $("score").textContent=T[S.lang].found(f,G.words.length);
-  $("win").hidden=f<G.words.length;
-  $("nextBtn").disabled=f<G.words.length;
+  const done=G.words.length>0&&f===G.words.length;
+  $("win").hidden=!done||S.play==="time";
+  $("nextBtn").disabled=!done;
 }
 function lineEl(r0,c0,r1,c1,color,cls){
   return `<line x1="${c0+.5}" y1="${r0+.5}" x2="${c1+.5}" y2="${r1+.5}" ${cls?`class="${cls}"`:`style="stroke:var(${color})"`}/>`;
@@ -409,7 +485,12 @@ function tryWord(a,b){
   g.style.top=`calc(6px + (100% - 12px) * ${((w.r0+w.r1)/2+.5)/G.n})`;
   board.appendChild(g);setTimeout(()=>g.remove(),1300);
   drawLines();updateScore();updateCoins(true);
-  if(G.words.every(x=>x.found)){sfx("win");sayWord(w)}else{sfx("find");sayWord(w)}
+  const all=G.words.every(x=>x.found);
+  sfx(all?"win":"find");sayWord(w);
+  if(S.play==="time"&&TM&&!TM.over){
+    TM.count++;renderTimer();
+    if(all)setTimeout(()=>{if(!TM.over)build(false)},900);
+  }
   return true;
 }
 function clearPend(){document.querySelectorAll(".cell.pend").forEach(c=>c.classList.remove("pend"))}
@@ -418,6 +499,7 @@ const board=$("board");
 board.addEventListener("pointerdown",e=>{
   ac();
   const p=cellAt(e.clientX,e.clientY);if(!p)return;
+  startTimer();
   drag={a:p,b:p};board.setPointerCapture(e.pointerId);drawLines([...p,...p]);
 });
 board.addEventListener("pointermove",e=>{
@@ -439,13 +521,120 @@ function endDrag(){
 board.addEventListener("pointerup",endDrag);
 board.addEventListener("pointercancel",()=>{drag=null;drawLines()});
 
+/* ---------- 2-minute mode ---------- */
+const LIMIT=120;
+let TM=null;
+const bestKey=()=>`best-${S.lang}-${S.lv}`;
+function resetTimer(){
+  if(TM)clearInterval(TM.iv);
+  TM={left:LIMIT,count:0,started:false,over:false,end:0,iv:null};
+  $("timeup").hidden=true;
+  renderTimer();
+}
+function startTimer(){
+  if(S.play!=="time"||!TM||TM.started||TM.over)return;
+  TM.started=true;TM.end=Date.now()+LIMIT*1000;TM.iv=setInterval(tick,200);renderTimer();
+}
+function tick(){
+  const left=Math.max(0,Math.ceil((TM.end-Date.now())/1000));
+  if(left!==TM.left){TM.left=left;if(left>0&&left<=5)sfx("tick");renderTimer()}
+  if(left<=0)timeUp();
+}
+function timeUp(){
+  clearInterval(TM.iv);TM.over=true;drag=null;pend=null;clearPend();drawLines();
+  const tr=T[S.lang],best=+store.get(bestKey(),"0")||0,rec=TM.count>best;
+  if(rec)store.set(bestKey(),String(TM.count));
+  $("tuN").textContent=tr.tuN(TM.count);
+  $("tuR").textContent=rec?tr.tuRec:tr.tuBest(best);
+  $("win").hidden=true;$("timeup").hidden=false;
+  sfx(rec?"win":"end");renderTimer();updateCoins();
+}
+function renderTimer(){
+  const on=S.play==="time";$("timer").hidden=!on;
+  if(!on){$("timeup").hidden=true;return}
+  if(!TM)resetTimer();
+  const tr=T[S.lang],m=Math.floor(TM.left/60),s=TM.left%60;
+  $("tClock").textContent=`${m}:${String(s).padStart(2,"0")}`;
+  $("tStats").textContent=tr.tStats(TM.count,+store.get(bestKey(),"0")||0);
+  $("tProg").style.width=`${TM.left/LIMIT*100}%`;
+  $("tTip").hidden=TM.started;
+  $("timer").classList.toggle("warn",TM.started&&TM.left<=10);
+}
+function restart(resetCoins){resetTimer();build(resetCoins)}
+
+/* ---------- parents ---------- */
+let gateOpen=false,gateQ=null,draft={emo:"",img:""};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function renderParent(){
+  const tr=T[S.lang],P=$("parent");
+  if(!gateOpen){
+    if(!gateQ)gateQ=[rnd(5)+4,rnd(5)+4];
+    P.innerHTML=`<b class="p-title">${tr.pTitle}</b><div class="gate"><label for="gateIn">${tr.gateQ(...gateQ)}</label>
+      <input class="inp" id="gateIn" inputmode="numeric" autocomplete="off" style="width:5.5rem">
+      <button class="btn primary" id="gateOk">${tr.gateOk}</button><span class="err" id="gateErr"></span></div>`;
+    return;
+  }
+  const list=CUSTOM.length?CUSTOM.map(c=>`<li><span class="pp">${c.img?`<img src="${c.img}" alt="">`:esc(c.emo||"📝")}</span>
+      <span class="wd">${esc(c.uz?fmt(c.uz,"uz"):"—")} <span>/ ${esc(c.ru||"—")}</span></span>
+      <button data-del="${c.id}" aria-label="×">✕</button></li>`).join(""):`<li><span class="wd"><span>${tr.pNone}</span></span></li>`;
+  P.innerHTML=`<b class="p-title">${tr.pTitle}</b><p class="p-note">${tr.pNote}</p>
+    <div class="p-form">
+      <div style="display:flex;gap:6px">
+        <input class="inp emo-in" id="pEmo" maxlength="8" placeholder="🙂" aria-label="Emoji" value="${esc(draft.emo)}">
+        <label class="pic-pick" title="${tr.pPhoto}">${draft.img?`<img src="${draft.img}" alt="">`:"📷"}<input type="file" id="pImg" accept="image/*" aria-label="${tr.pPhoto}"></label>
+      </div>
+      <input class="inp" id="pUz" placeholder="${tr.pUz}" autocomplete="off" autocapitalize="characters" aria-label="${tr.pUz}">
+      <input class="inp ru" id="pRu" placeholder="${tr.pRu}" autocomplete="off" autocapitalize="characters" aria-label="${tr.pRu}">
+      <div class="actions"><button class="btn primary" id="pAdd">${tr.pAdd}</button><span class="err" id="pErr"></span></div>
+    </div>
+    <ul class="p-list">${list}</ul>`;
+}
+function normUz(s){
+  return s.trim().toUpperCase().replace(/([OG])\s*['‘’`ʻʼ´]/g,"$1ʻ");
+}
+function addCustom(){
+  const tr=T[S.lang],err=m=>{$("pErr").textContent=m};
+  const uz=normUz($("pUz").value),ru=$("pRu").value.trim().toUpperCase(),emo=$("pEmo").value.trim();
+  if(!uz&&!ru)return err(tr.eNeed);
+  if(CUSTOM.length>=60)return err(tr.eMax);
+  if(uz){
+    if(!/^(?:[A-Z]|Oʻ|Gʻ)+$/.test(uz))return err(tr.eUz);
+    const n=tok(uz,"uz").length;if(n<3||n>12)return err(tr.eLen);
+  }
+  if(ru){
+    if(!/^[А-ЯЁ]+$/.test(ru))return err(tr.eRu);
+    if(ru.length<3||ru.length>12)return err(tr.eLen);
+  }
+  CUSTOM.push({id:Date.now().toString(36)+rnd(1e4),uz,ru,emo:emo||"",img:draft.img||""});
+  saveCustom();draft={emo:"",img:""};
+  sfx("coin");render();renderParent();
+}
+function loadPhoto(file){
+  const tr=T[S.lang],r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+      const c=document.createElement("canvas"),z=160;c.width=c.height=z;
+      const k=Math.min(im.width,im.height),sx=(im.width-k)/2,sy=(im.height-k)/2;
+      c.getContext("2d").drawImage(im,sx,sy,k,k,0,0,z,z);
+      draft.emo=$("pEmo").value;draft.img=c.toDataURL("image/jpeg",.8);renderParent();
+    };im.onerror=()=>{$("pErr").textContent=tr.eImg};im.src=r.result};
+  r.onerror=()=>{$("pErr").textContent=tr.eImg};
+  r.readAsDataURL(file);
+}
+document.addEventListener("change",e=>{if(e.target.id==="pImg"&&e.target.files[0])loadPhoto(e.target.files[0])});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter")return;
+  if(e.target.id==="gateIn")$("gateOk").click();
+  else if(["pUz","pRu","pEmo"].includes(e.target.id))$("pAdd").click();
+});
+
 function openPanel(id){
-  const panels={setBtn:"settings",infoBtn:"infoPanel",shopBtn:"shop"};
+  const panels={setBtn:"settings",infoBtn:"infoPanel",shopBtn:"shop",parentBtn:"parent"};
   for(const [btn,pid] of Object.entries(panels)){
     const open=btn===id&&$(pid).hidden;
     $(pid).hidden=!open;$(btn).setAttribute("aria-expanded",open);
   }
   if(!$("shop").hidden)renderShop();
+  if(!$("parent").hidden)renderParent();
 }
 function saveOwned(){store.set("owned",JSON.stringify([...owned]))}
 
@@ -454,12 +643,13 @@ document.addEventListener("click",e=>{
   const card=e.target.closest(".card");
   if(card){const w=G.words[+card.dataset.i];if(w&&(!S.hide||w.found))sayWord(w);return}
   const b=e.target.closest("button");if(!b)return;
-  if(b.dataset.lang){S.lang=b.dataset.lang;store.set("lang",S.lang);build()}
+  if(b.dataset.lang){S.lang=b.dataset.lang;store.set("lang",S.lang);restart()}
   else if(b.dataset.cat){
     if(!catOpen(b.dataset.cat)){openPanel("shopBtn");return}
-    S.cat=b.dataset.cat;store.set("cat",S.cat);build()}
-  else if(b.dataset.lv){S.lv=+b.dataset.lv;store.set("lv",S.lv);build()}
-  else if(b.dataset.mode){S.mode=b.dataset.mode;store.set("mode",S.mode);render()}
+    S.cat=b.dataset.cat;store.set("cat",S.cat);restart()}
+  else if(b.dataset.lv){S.lv=+b.dataset.lv;store.set("lv",S.lv);restart()}
+  else if(b.dataset.play){S.play=b.dataset.play;store.set("play",S.play);restart()}
+  else if(b.dataset.mode){S.mode=b.dataset.mode;store.set("mode",S.mode);restart()}
   else if(b.dataset.snd){S.sound=b.dataset.snd==="1";store.set("sound",S.sound?"1":"0");render();if(S.sound)sfx("coin");else if(canSpeak)speechSynthesis.cancel()}
   else if(b.dataset.buy){
     const it=SHOP.find(i=>i.id===b.dataset.buy);if(!it||owned.has(it.id)||S.coins<it.price)return;
@@ -469,11 +659,16 @@ document.addEventListener("click",e=>{
     updateCoins(true);renderShop();
   }
   else if(b.dataset.skinpick){S.skin=b.dataset.skinpick;store.set("skin",S.skin);$("board").dataset.skin=S.skin;renderShop()}
-  else if(b.dataset.play){S.cat=b.dataset.play;store.set("cat",S.cat);openPanel("");build()}
-  else if(b.id==="newBtn"||b.id==="again")build(true);
+  else if(b.dataset.playcat){S.cat=b.dataset.playcat;store.set("cat",S.cat);openPanel("");restart()}
+  else if(b.id==="newBtn"||b.id==="again")restart(true);
+  else if(b.id==="tuAgain")restart(false);
   else if(b.id==="nextBtn"||b.id==="nextWin")build(false);
   else if(b.id==="hideBtn"){S.hide=!S.hide;store.set("hide",S.hide?"1":"0");render()}
   else if(b.id==="setBtn"||b.id==="infoBtn"||b.id==="shopBtn")openPanel(b.id);
+  else if(b.id==="parentBtn"){$("settings").hidden=true;$("setBtn").setAttribute("aria-expanded",false);openPanel("parentBtn")}
+  else if(b.id==="gateOk"){if(+$("gateIn").value===gateQ[0]*gateQ[1]){gateOpen=true;renderParent()}else{$("gateErr").textContent=T[S.lang].gateErr;gateQ=null;setTimeout(renderParent,900)}}
+  else if(b.id==="pAdd")addCustom();
+  else if(b.dataset.del){CUSTOM=CUSTOM.filter(c=>c.id!==b.dataset.del);saveCustom();if(!catShown(S.cat)){S.cat="all";store.set("cat","all");restart()}else render();renderParent()}
   else if(b.id==="hintBtn"){
     const left=G.words.filter(w=>!w.found);if(!left.length||S.coins<G.hintCost)return;
     S.coins-=G.hintCost;G.hintCost++;updateCoins(true);sfx("hint");
@@ -484,6 +679,7 @@ document.addEventListener("click",e=>{
     card.classList.add("hint");setTimeout(()=>card.classList.remove("hint"),1500);
   }
 });
+resetTimer();
 build();
 </script>
 <script>
