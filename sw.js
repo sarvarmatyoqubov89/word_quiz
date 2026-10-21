@@ -1,6 +1,6 @@
 // Soʻz ovchisi — offline ishlashi uchun service worker.
 // Oʻyinni yangilaganda VERSION ni oshiring (v2, v3 ...), shunda telefonlar yangi versiyani oladi.
-const VERSION = "v7";
+const VERSION = "v9";
 const CACHE = "soz-ovchisi-" + VERSION;
 const FILES = ["./", "./index.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];

@@ -1,14 +1,14 @@
 {
-  "name": "Soʻz ovchisi",
-  "short_name": "Soʻz ovchisi",
+  "name": "Qitmircha harflar",
+  "short_name": "Qitmircha",
   "description": "Bolalar uchun rasmli soʻz qidirish oʻyini",
   "lang": "uz",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef4fb",
-  "theme_color": "#2f6fd0",
+  "background_color": "#5b6dff",
+  "theme_color": "#5b4dff",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
