@@ -132,7 +132,9 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
 .win p{margin:0;font-weight:700;font-size:1.1rem}
 .win .rec{color:var(--gold);font-family:var(--display);font-weight:800}
 .full{width:100%}
-.p-title{font-family:var(--display);font-size:1.15rem;display:block;margin-bottom:4px}
+.p-title{font-family:var(--display);font-size:1.15rem;display:block}
+.p-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.p-head .btn{padding:6px 12px;font-size:.88rem}
 .p-note{color:var(--muted);font-size:.88rem;margin:0 0 10px}
 .gate{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .inp{font:600 1rem var(--body);color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;min-width:0}
@@ -240,7 +242,7 @@ const T={
    empty:"Bu mavzuda bu til uchun soʻz yoʻq. Ota-ona boʻlimida soʻz qoʻshing yoki boshqa mavzuni tanlang.",
    parent:"👪 Ota-ona boʻlimi",pTitle:"Ota-ona boʻlimi",gateQ:(a,b)=>`Kattalar uchun: ${a} × ${b} = ?`,gateOk:"Ochish",gateErr:"Javob notoʻgʻri",
    pNote:"Oʻz soʻzlaringizni qoʻshing: oila aʼzolarining ismlari, maktab lugʻati va boshqalar. Bitta yoki ikkala tilda yozing. Rasm qoʻyish ixtiyoriy: emoji yozing yoki surat yuklang. Soʻzlar «⭐ Mening soʻzlarim» mavzusida chiqadi.",
-   pUz:"Oʻzbekcha (lotin)",pRu:"Ruscha (kirill)",pAdd:"Qoʻshish",pPhoto:"Surat",pNone:"Hali soʻz qoʻshilmagan.",
+   pUz:"Oʻzbekcha (lotin)",pRu:"Ruscha (kirill)",pAdd:"Qoʻshish",pPhoto:"Surat",pClose:"✕ Yopish",pNone:"Hali soʻz qoʻshilmagan.",
    eNeed:"Kamida bitta tilda soʻz yozing.",eLen:"Soʻz 3 tadan 12 tagacha harf boʻlsin.",eUz:"Oʻzbekcha soʻzda faqat lotin harflari boʻlsin (boʻsh joysiz).",
    eRu:"Ruscha soʻzda faqat kirill harflari boʻlsin (boʻsh joysiz).",eMax:"Koʻpi bilan 60 ta soʻz qoʻshish mumkin.",eImg:"Suratni ochib boʻlmadi.",
    shop:"Doʻkon",shopNote:"Tangalarga jadval bezagi va yangi mavzular oching. Sotib olinganlar saqlanib qoladi.",
@@ -256,7 +258,7 @@ const T={
    empty:"В этой теме нет слов на этом языке. Добавьте слова в разделе для родителей или выберите другую тему.",
    parent:"👪 Для родителей",pTitle:"Для родителей",gateQ:(a,b)=>`Для взрослых: ${a} × ${b} = ?`,gateOk:"Открыть",gateErr:"Неверный ответ",
    pNote:"Добавьте свои слова: имена членов семьи, школьные слова и другое. Пишите на одном или обоих языках. Картинка по желанию: эмодзи или фото. Слова появятся в теме «⭐ Мои слова».",
-   pUz:"Узбекский (латиница)",pRu:"Русский (кириллица)",pAdd:"Добавить",pPhoto:"Фото",pNone:"Слов пока нет.",
+   pUz:"Узбекский (латиница)",pRu:"Русский (кириллица)",pAdd:"Добавить",pPhoto:"Фото",pClose:"✕ Закрыть",pNone:"Слов пока нет.",
    eNeed:"Напишите слово хотя бы на одном языке.",eLen:"В слове должно быть от 3 до 12 букв.",eUz:"В узбекском слове только латинские буквы (без пробелов).",
    eRu:"В русском слове только кириллица (без пробелов).",eMax:"Можно добавить не больше 60 слов.",eImg:"Не удалось открыть фото.",
    shop:"Магазин",shopNote:"За монеты открой новые оформления и темы. Покупки сохраняются.",
@@ -569,7 +571,7 @@ function renderParent(){
   const tr=T[S.lang],P=$("parent");
   if(!gateOpen){
     if(!gateQ)gateQ=[rnd(5)+4,rnd(5)+4];
-    P.innerHTML=`<b class="p-title">${tr.pTitle}</b><div class="gate"><label for="gateIn">${tr.gateQ(...gateQ)}</label>
+    P.innerHTML=`<div class="p-head"><b class="p-title">${tr.pTitle}</b><button class="btn" id="pClose">${tr.pClose}</button></div><div class="gate"><label for="gateIn">${tr.gateQ(...gateQ)}</label>
       <input class="inp" id="gateIn" inputmode="numeric" autocomplete="off" style="width:5.5rem">
       <button class="btn primary" id="gateOk">${tr.gateOk}</button><span class="err" id="gateErr"></span></div>`;
     return;
@@ -577,7 +579,7 @@ function renderParent(){
   const list=CUSTOM.length?CUSTOM.map(c=>`<li><span class="pp">${c.img?`<img src="${c.img}" alt="">`:esc(c.emo||"📝")}</span>
       <span class="wd">${esc(c.uz?fmt(c.uz,"uz"):"—")} <span>/ ${esc(c.ru||"—")}</span></span>
       <button data-del="${c.id}" aria-label="×">✕</button></li>`).join(""):`<li><span class="wd"><span>${tr.pNone}</span></span></li>`;
-  P.innerHTML=`<b class="p-title">${tr.pTitle}</b><p class="p-note">${tr.pNote}</p>
+  P.innerHTML=`<div class="p-head"><b class="p-title">${tr.pTitle}</b><button class="btn" id="pClose">${tr.pClose}</button></div><p class="p-note">${tr.pNote}</p>
     <div class="p-form">
       <div style="display:flex;gap:6px">
         <input class="inp emo-in" id="pEmo" maxlength="8" placeholder="🙂" aria-label="Emoji" value="${esc(draft.emo)}">
@@ -620,6 +622,7 @@ function loadPhoto(file){
   r.onerror=()=>{$("pErr").textContent=tr.eImg};
   r.readAsDataURL(file);
 }
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&gateOpen){openPanel("")}});
 document.addEventListener("change",e=>{if(e.target.id==="pImg"&&e.target.files[0])loadPhoto(e.target.files[0])});
 document.addEventListener("keydown",e=>{
   if(e.key!=="Enter")return;
@@ -635,7 +638,10 @@ function openPanel(id){
   }
   if(!$("shop").hidden)renderShop();
   if(!$("parent").hidden)renderParent();
+  else lockParent();
 }
+// leaving the parents section always locks it again
+function lockParent(){gateOpen=false;gateQ=null;draft={emo:"",img:""}}
 function saveOwned(){store.set("owned",JSON.stringify([...owned]))}
 
 document.addEventListener("click",e=>{
@@ -668,6 +674,7 @@ document.addEventListener("click",e=>{
   else if(b.id==="parentBtn"){$("settings").hidden=true;$("setBtn").setAttribute("aria-expanded",false);openPanel("parentBtn")}
   else if(b.id==="gateOk"){if(+$("gateIn").value===gateQ[0]*gateQ[1]){gateOpen=true;renderParent()}else{$("gateErr").textContent=T[S.lang].gateErr;gateQ=null;setTimeout(renderParent,900)}}
   else if(b.id==="pAdd")addCustom();
+  else if(b.id==="pClose")openPanel("");
   else if(b.dataset.del){CUSTOM=CUSTOM.filter(c=>c.id!==b.dataset.del);saveCustom();if(!catShown(S.cat)){S.cat="all";store.set("cat","all");restart()}else render();renderParent()}
   else if(b.id==="hintBtn"){
     const left=G.words.filter(w=>!w.found);if(!left.length||S.coins<G.hintCost)return;
