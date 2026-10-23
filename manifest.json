@@ -1,7 +1,7 @@
 {
-  "name": "Qitmircha harflar",
-  "short_name": "Qitmircha",
-  "description": "Bolalar uchun rasmli soʻz qidirish oʻyini",
+  "name": "Qitmirça harflar",
+  "short_name": "Qitmirça",
+  "description": "Bolalar uçun rasmli söz qidiriş öyini",
   "lang": "uz",
   "start_url": "./",
   "scope": "./",
