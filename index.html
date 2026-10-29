@@ -74,8 +74,8 @@ h1 span{color:var(--accent)}
 .cell.flash{animation:fl .5s 3}
 @keyframes fl{50%{background:var(--sel)}}
 svg.lines{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);z-index:0;pointer-events:none}
-svg.lines line{stroke-linecap:round;stroke-width:.72;opacity:var(--hl-op)}
-svg.lines line.live{stroke:var(--sel);opacity:.8}
+svg.lines polyline{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:.72;opacity:var(--hl-op)}
+svg.lines polyline.live{stroke:var(--sel);opacity:.8}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tools{display:flex;gap:8px}
 .btn.ic{width:42px;height:42px;padding:0;border-radius:50%;font-size:1.2rem;line-height:1;display:inline-flex;align-items:center;justify-content:center;position:relative}
@@ -111,7 +111,7 @@ svg.lines line.live{stroke:var(--sel);opacity:.8}
 .bonus-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-weight:700;font-size:.9rem;color:var(--muted)}
 .bonus-row .chip{font-family:var(--display);letter-spacing:.05em;color:var(--ink);padding:3px 10px;border-radius:999px;
   background:color-mix(in srgb,var(--gold) 28%,var(--paper));border:1.5px solid var(--gold)}
-svg.lines line.bonus{stroke:var(--gold);stroke-dasharray:.25 .2;opacity:.75}
+svg.lines polyline.bonus{stroke:var(--gold);opacity:.7}
 .how{color:var(--ink);font-size:.95rem;line-height:1.5;margin:0;max-width:60ch}
 .info-btn span{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:1.35rem;color:var(--accent)}
 .info-btn[aria-expanded="true"] span{color:var(--accent-ink)}
@@ -269,7 +269,7 @@ const T={
    shop:"Dökon",shopNote:"Tangalarga jadval bezagi va yangi mavzular oçing. Sotib olinganlar saqlanib qoladi.",
    secSkin:"Jadval bezagi",secCat:"Yangi mavzular",use:"Tanlaş",inUse:"✓ Tanlangan",play:"Öynaş ▸",
    skins:{classic:"Oddiy",sea:"Dengiz",forest:"Örmon",candy:"Şirinlik",space:"Kosmos"},
-   how:"Rasmga qarang va sözni jadvaldan toping. Barmoq bilan birinçi harfdan oxirgi harfgaça torting yoki birinçi va oxirgi harfga bosing. Har bir söz uçun 1–5 tanga beriladi: söz qançalik uzun va qiyin joylaşgan bölsa, şunça köp. Tangalarni yordamga yoki 🛒 dökonda jadval bezagi va yangi mavzularga sarflang. «Ikki til» rejimida rasm ostidagi söz boşqa tilda yozilgan, uni jadvaldan tanlangan tilda toping. Jadvalda kartoçkada yöq yaşirin sözlar ham bor: ularni topsangiz 5 tangadan beriladi. Kartoçkaga bossangiz, söz ovoz çiqarib aytiladi. «⏱ 2 daqiqa» rejimida vaqt tugagunça imkon qadar köp söz toping: jadval tugasa, yangisi özi oçiladi, eng yaxşi natija saqlanadi. Ota-onalar sozlamalardagi «👪 Ota-ona bölimi»da öz sözlarini qöşişi mumkin."},
+   how:"Rasmga qarang va sözni jadvaldan toping. Barmoq bilan birinçi harfdan oxirgi harfgaça torting yoki birinçi va oxirgi harfga bosing. Oson darajada sözlar faqat gorizontal va vertikal turadi, Örtada ilon izi bölib burilgan sözlar ham bor (barmoqni harflar ustidan yurgizing), Qiyinda diagonal va teskari sözlar ham qöşiladi. Har bir söz uçun 1–5 tanga beriladi: söz qançalik uzun va qiyin joylaşgan bölsa, şunça köp. Tangalarni yordamga yoki 🛒 dökonda jadval bezagi va yangi mavzularga sarflang. «Ikki til» rejimida rasm ostidagi söz boşqa tilda yozilgan, uni jadvaldan tanlangan tilda toping. Jadvalda kartoçkada yöq yaşirin sözlar ham bor: ularni topsangiz 5 tangadan beriladi. Kartoçkaga bossangiz, söz ovoz çiqarib aytiladi. «⏱ 2 daqiqa» rejimida vaqt tugagunça imkon qadar köp söz toping: jadval tugasa, yangisi özi oçiladi, eng yaxşi natija saqlanadi. Ota-onalar sozlamalardagi «👪 Ota-ona bölimi»da öz sözlarini qöşişi mumkin."},
  ru:{t:'Хитрые <span>буковки</span>',cats:{all:"Все",a:"Животные",f:"Фрукты-овощи",o:"Предметы",t:"Транспорт",k:"Профессии",m:"⭐ Мои слова"},
    lv:["Легко","Средне","Сложно"],found:(a,b)=>`Найдено: ${a} / ${b}`,hide:"Скрыть слова",show:"Показать слова",
    hint:"Подсказка",nw:"Новая игра",nx:"Дальше ▸",win:"Молодец!",lang:"Русский",
@@ -285,14 +285,16 @@ const T={
    shop:"Магазин",shopNote:"За монеты открой новые оформления и темы. Покупки сохраняются.",
    secSkin:"Оформление",secCat:"Новые темы",use:"Выбрать",inUse:"✓ Выбрано",play:"Играть ▸",
    skins:{classic:"Обычное",sea:"Море",forest:"Лес",candy:"Сладости",space:"Космос"},
-   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки или в 🛒 магазине на оформление и новые темы. В режиме «Два языка» под картинкой слово на другом языке, а искать его нужно на выбранном языке. В таблице спрятаны и тайные слова, которых нет на карточках: за каждое 5 монет. Нажми на карточку, и слово прозвучит вслух. В режиме «⏱ 2 минуты» найди как можно больше слов: когда таблица закончится, сразу откроется новая, лучший результат сохраняется. Родители могут добавить свои слова в настройках, раздел «👪 Для родителей»."}
+   how:"Посмотри на картинку и найди слово в таблице. Проведи пальцем от первой буквы до последней или нажми на первую и последнюю букву. На лёгком уровне слова идут только по горизонтали и вертикали, на среднем есть слова-змейки, которые поворачивают (веди пальцем по буквам), на сложном добавляются диагональные и обратные слова. За каждое слово даётся от 1 до 5 монет: чем длиннее и сложнее слово, тем больше. Монеты можно тратить на подсказки или в 🛒 магазине на оформление и новые темы. В режиме «Два языка» под картинкой слово на другом языке, а искать его нужно на выбранном языке. В таблице спрятаны и тайные слова, которых нет на карточках: за каждое 5 монет. Нажми на карточку, и слово прозвучит вслух. В режиме «⏱ 2 минуты» найди как можно больше слов: когда таблица закончится, сразу откроется новая, лучший результат сохраняется. Родители могут добавить свои слова в настройках, раздел «👪 Для родителей»."}
 };
 const FILL={
  ru:"АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЬЭЮЯ".split(""),
  uz:"A B D E F G H I J K L M N O P Q R S T U V X Y Z Ö Ğ Ş Ç".split(" ")
 };
-const LEVELS=[{n:9,k:6,d:[[0,1],[1,0]]},{n:11,k:8,d:[[0,1],[1,0],[1,1]]},
-  {n:12,k:10,d:[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]]}];
+// Easy: across and down. Medium: + snake (bending) words. Hard: + diagonals and backwards.
+const LEVELS=[{n:9,k:6,d:[[0,1],[1,0]],snake:0,diag:false},
+  {n:11,k:8,d:[[0,1],[1,0]],snake:.45,diag:false},
+  {n:12,k:10,d:[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]],snake:.35,diag:true}];
 const COLORS=["--h1","--h2","--h3","--h4","--h5","--h6","--h7","--h8"];
 const BONUS_N=[1,2,3], BONUS_VAL=5;
 const SHOP=[
@@ -332,9 +334,10 @@ const HINT_START=5;
 function wordValue(w){
   const len=w.t.length;
   let v=len<=3?1:len===4?2:len===5?3:len<=7?4:5;
-  const dr=Math.sign(w.r1-w.r0),dc=Math.sign(w.c1-w.c0);
-  if(dr&&dc)v++;            // diagonal
-  if(dr<0||dc<0)v++;        // backwards
+  if(w.snake)v+=1;                       // bending word
+  else{const dr=Math.sign(w.path[1][0]-w.path[0][0]),dc=Math.sign(w.path[1][1]-w.path[0][1]);
+    if(dr&&dc)v++;                       // diagonal
+    if(dr<0||dc<0)v++;}                  // backwards
   return Math.min(5,v);
 }
 let G=null, pend=null, drag=null;
@@ -394,6 +397,48 @@ function sayWord(w){
 }
 
 /* ---------- game ---------- */
+const fits=(grid,r,c,ch)=>{const v=grid[r][c];return !v||v===ch};
+function placeStraight(grid,t,dirs){
+  const n=grid.length,len=t.length;
+  for(let tries=0;tries<300;tries++){
+    const [dr,dc]=dirs[rnd(dirs.length)],r0=rnd(n),c0=rnd(n),r1=r0+dr*(len-1),c1=c0+dc*(len-1);
+    if(r1<0||r1>=n||c1<0||c1>=n)continue;
+    const path=[];let ok=true;
+    for(let i=0;i<len;i++){const r=r0+dr*i,c=c0+dc*i;if(!fits(grid,r,c,t[i])){ok=false;break}path.push([r,c])}
+    if(ok)return path;
+  }
+  return null;
+}
+// a bending word: every next letter is left, right, up or down of the previous one, with at least one turn
+function placeSnake(grid,t){
+  const n=grid.length,len=t.length,D=[[0,1],[1,0],[0,-1],[-1,0]];
+  for(let tries=0;tries<200;tries++){
+    const r0=rnd(n),c0=rnd(n);if(!fits(grid,r0,c0,t[0]))continue;
+    const path=[[r0,c0]],used=new Set([r0*n+c0]);
+    const go=()=>{
+      if(path.length===len)return true;
+      const [r,c]=path[path.length-1];
+      for(const [dr,dc] of shuffle(D.slice())){
+        const nr=r+dr,nc=c+dc;
+        if(nr<0||nr>=n||nc<0||nc>=n||used.has(nr*n+nc)||!fits(grid,nr,nc,t[path.length]))continue;
+        path.push([nr,nc]);used.add(nr*n+nc);
+        if(go())return true;
+        path.pop();used.delete(nr*n+nc);
+      }
+      return false};
+    if(!go())continue;
+    let turns=0;for(let i=2;i<len;i++){const a=path[i-2],b=path[i-1],c=path[i];if(b[0]-a[0]!==c[0]-b[0]||b[1]-a[1]!==c[1]-b[1])turns++}
+    if(turns>=1&&turns<=Math.max(1,len-3))return path;
+  }
+  return null;
+}
+function place(grid,t,L){
+  let path=null,snake=false;
+  if(L.snake&&t.length>=4&&Math.random()<L.snake){path=placeSnake(grid,t);snake=!!path}
+  if(!path)path=placeStraight(grid,t,L.d);
+  if(path)path.forEach(([r,c],i)=>grid[r][c]=t[i]);
+  return path&&{path,snake,r0:path[0][0],c0:path[0][1]};
+}
 function build(reset){
   const L=LEVELS[S.lv], n=L.n, ol=other(S.lang);
   let pool=allWords().filter(w=>S.cat==="all"?catOpen(w[3]):w[3]===S.cat)
@@ -405,16 +450,8 @@ function build(reset){
   for(const w of pool){
     if(words.length>=L.k)break;
     if(words.some(x=>x.word.includes(w.word)||w.word.includes(x.word)))continue;
-    for(let tries=0;tries<300;tries++){
-      const [dr,dc]=L.d[rnd(L.d.length)], len=w.t.length;
-      const r0=rnd(n),c0=rnd(n), r1=r0+dr*(len-1), c1=c0+dc*(len-1);
-      if(r1<0||r1>=n||c1<0||c1>=n)continue;
-      let ok=true;
-      for(let i=0;i<len;i++){const v=grid[r0+dr*i][c0+dc*i];if(v&&v!==w.t[i]){ok=false;break}}
-      if(!ok)continue;
-      for(let i=0;i<len;i++)grid[r0+dr*i][c0+dc*i]=w.t[i];
-      const o={...w,r0,c0,r1,c1,found:false};o.val=wordValue(o);words.push(o);break;
-    }
+    const pl=place(grid,w.t,L);
+    if(pl){const o={...w,...pl,found:false};o.val=wordValue(o);words.push(o)}
   }
   // hidden bonus words: not on the cards, preferably from another topic
   const shown=new Set(words.map(w=>w.word)),hidden=[];
@@ -424,22 +461,23 @@ function build(reset){
   for(const w of bonusPool){
     if(hidden.length>=BONUS_N[S.lv])break;
     if([...words,...hidden].some(x=>x.word.includes(w.word)||w.word.includes(x.word)))continue;
-    for(let tries=0;tries<300;tries++){
-      const [dr,dc]=L.d[rnd(L.d.length)], len=w.t.length;
-      const r0=rnd(n),c0=rnd(n), r1=r0+dr*(len-1), c1=c0+dc*(len-1);
-      if(r1<0||r1>=n||c1<0||c1>=n)continue;
-      let ok=true;
-      for(let i=0;i<len;i++){const v=grid[r0+dr*i][c0+dc*i];if(v&&v!==w.t[i]){ok=false;break}}
-      if(!ok)continue;
-      for(let i=0;i<len;i++)grid[r0+dr*i][c0+dc*i]=w.t[i];
-      hidden.push({word:w.word,t:w.t});break;
-    }
+    if(place(grid,w.t,L))hidden.push({word:w.word,t:w.t});
   }
   const f=FILL[S.lang];
   for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!grid[r][c])grid[r][c]=f[rnd(f.length)];
   // every known word of this language counts as a bonus, also ones formed by chance
   const dict=new Set(allWords().map(w=>S.lang==="ru"?w[1]:w[2]).filter(x=>x&&tok(x,S.lang).length>=3&&!shown.has(x)));
-  G={n,grid,words:words.sort(()=>Math.random()-.5),ci:0,hintCost:HINT_START,hidden,dict,bonus:[]};pend=null;if(reset)S.coins=0;
+  // count every bonus word that is really in the grid, including ones formed by chance
+  const rev=L.diag,cdirs=L.diag?[[0,1],[1,0],[1,1],[-1,1]]:[[0,1],[1,0]];
+  const inGrid=word=>{const t=tok(word,S.lang),L=t.length;
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++)for(const [dr,dc] of cdirs){
+      const r1=r+dr*(L-1),c1=c+dc*(L-1);if(r1<0||r1>=n||c1<0||c1>=n)continue;
+      let f=true,b=true;
+      for(let i=0;i<L;i++){const g=grid[r+dr*i][c+dc*i];if(g!==t[i])f=false;if(!rev||g!==t[L-1-i])b=false;if(!f&&!b)break}
+      if(f||b)return true}
+    return false};
+  for(const w of dict)if(!hidden.some(h=>h.word===w)&&inGrid(w))hidden.push({word:w,t:tok(w,S.lang)});
+  G={n,grid,words:words.sort(()=>Math.random()-.5),ci:0,hintCost:HINT_START,hidden,dict,bonus:[],diag:L.diag};pend=null;if(reset)S.coins=0;
   render();
 }
 
@@ -505,7 +543,7 @@ function updateCoins(bump){
   if(bump){const b=$("coinBox");b.classList.add("bump");setTimeout(()=>b.classList.remove("bump"),220)}
 }
 function renderBonus(){
-  const tr=T[S.lang],nf=G.bonus.filter(b=>G.hidden.some(h=>h.word===b.word)).length;
+  const tr=T[S.lang],nf=G.bonus.length;
   $("bonusRow").innerHTML=G.hidden.length||G.bonus.length?`<span>${tr.bonus(nf,G.hidden.length)} · ${tr.bonusTip}</span>`+
     G.bonus.map(b=>`<span class="chip">${b.word}</span>`).join(""):"";
 }
@@ -518,13 +556,20 @@ function updateScore(){
   $("win").hidden=!done||S.play==="time";
   $("nextBtn").disabled=!done;
 }
-function lineEl(r0,c0,r1,c1,color,cls){
-  return `<line x1="${c0+.5}" y1="${r0+.5}" x2="${c1+.5}" y2="${r1+.5}" ${cls?`class="${cls}"`:`style="stroke:var(${color})"`}/>`;
+function pathEl(path,color,cls){
+  const pts=(path.length===1?[path[0],path[0]]:path).map(([r,c])=>`${c+.5},${r+.5}`).join(" ");
+  return `<polyline points="${pts}" ${cls?`class="${cls}"`:`style="stroke:var(${color})"`}/>`;
 }
 function drawLines(live){
-  let s=G.bonus.map(b=>lineEl(b.r0,b.c0,b.r1,b.c1,null,"bonus")).join("")+G.words.filter(w=>w.found).map(w=>lineEl(w.r0,w.c0,w.r1,w.c1,w.color)).join("");
-  if(live)s+=lineEl(...live,null,"live");
+  let s=G.bonus.map(b=>pathEl(b.path,null,"bonus")).join("")+G.words.filter(w=>w.found).map(w=>pathEl(w.path,w.color)).join("");
+  if(live)s+=pathEl(live,null,"live");
   $("lines").innerHTML=s;
+}
+const centre=path=>[path.reduce((a,p)=>a+p[0],0)/path.length,path.reduce((a,p)=>a+p[1],0)/path.length];
+function popGain(path,text){
+  const [r,c]=centre(path),g=document.createElement("div");g.className="gain";g.textContent=text;
+  g.style.left=`calc(6px + (100% - 12px) * ${(c+.5)/G.n})`;g.style.top=`calc(6px + (100% - 12px) * ${(r+.5)/G.n})`;
+  board.appendChild(g);setTimeout(()=>g.remove(),1300);
 }
 function cellAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.classList.contains("cell")?[+el.dataset.r,+el.dataset.c]:null}
 function snap(a,b){
@@ -533,35 +578,28 @@ function snap(a,b){
   if(Math.abs(dr)>Math.abs(dc))return Math.abs(dc)*2<Math.abs(dr)?[b[0],a[1]]:[a[0]+Math.sign(dr)*Math.abs(dc),b[1]];
   return Math.abs(dr)*2<Math.abs(dc)?[a[0],b[1]]:[b[0],a[1]+Math.sign(dc)*Math.abs(dr)];
 }
-function tryBonus(a,b,seq){
+const straightPath=(a,b)=>{const dr=Math.sign(b[0]-a[0]),dc=Math.sign(b[1]-a[1]),len=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]))+1;
+  return Array.from({length:len},(_,i)=>[a[0]+dr*i,a[1]+dc*i])};
+function tryBonus(path,seq){
   if(seq.length<3)return false;
   const fw=seq.join(""),bw=[...seq].reverse().join("");
-  const word=G.dict.has(fw)?fw:G.dict.has(bw)?bw:null;
-  if(!word||G.bonus.some(x=>x.word===word))return false;
-  G.bonus.push({word,r0:a[0],c0:a[1],r1:b[0],c1:b[1]});
-  S.coins+=BONUS_VAL;
-  const g=document.createElement("div");g.className="gain";g.textContent=`🎁 +${BONUS_VAL} 🪙`;
-  g.style.left=`calc(6px + (100% - 12px) * ${((a[1]+b[1])/2+.5)/G.n})`;
-  g.style.top=`calc(6px + (100% - 12px) * ${((a[0]+b[0])/2+.5)/G.n})`;
-  board.appendChild(g);setTimeout(()=>g.remove(),1300);
+  const h=G.hidden.find(x=>x.word===fw||(G.diag&&x.word===bw));
+  if(!h||G.bonus.some(x=>x.word===h.word))return false;
+  G.bonus.push({word:h.word,path});
+  S.coins+=BONUS_VAL;popGain(path,`🎁 +${BONUS_VAL} 🪙`);
   drawLines();updateScore();updateCoins(true);
-  sfx("coin");setTimeout(()=>sfx("find"),120);say(word,S.lang);
+  sfx("coin");setTimeout(()=>sfx("find"),120);say(h.word,S.lang);
   if(S.play==="time"&&TM&&!TM.over){TM.count++;renderTimer()}
   return true;
 }
-function tryWord(a,b){
-  const dr=Math.sign(b[0]-a[0]),dc=Math.sign(b[1]-a[1]),len=Math.max(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]))+1;
-  const seq=[];for(let i=0;i<len;i++)seq.push(G.grid[a[0]+dr*i][a[1]+dc*i]);
+function tryPath(path){
+  const seq=path.map(([r,c])=>G.grid[r][c]);
   const s=seq.join("|"),rs=[...seq].reverse().join("|");
-  const w=G.words.find(w=>!w.found&&(w.t.join("|")===s||w.t.join("|")===rs));
-  if(!w)return tryBonus(a,b,seq);
-  w.found=true;w.color=COLORS[G.ci++%COLORS.length];
+  const w=G.words.find(w=>!w.found&&(w.t.join("|")===s||(G.diag&&w.t.join("|")===rs)));
+  if(!w)return tryBonus(path,seq);
+  w.found=true;w.path=path;w.color=COLORS[G.ci++%COLORS.length];
   $("card"+G.words.indexOf(w)).classList.add("found");
-  S.coins+=w.val;
-  const g=document.createElement("div");g.className="gain";g.textContent=`+${w.val} 🪙`;
-  g.style.left=`calc(6px + (100% - 12px) * ${((w.c0+w.c1)/2+.5)/G.n})`;
-  g.style.top=`calc(6px + (100% - 12px) * ${((w.r0+w.r1)/2+.5)/G.n})`;
-  board.appendChild(g);setTimeout(()=>g.remove(),1300);
+  S.coins+=w.val;popGain(path,`+${w.val} 🪙`);
   drawLines();updateScore();updateCoins(true);
   const all=G.words.every(x=>x.found);
   sfx(all?"win":"find");sayWord(w);
@@ -571,30 +609,51 @@ function tryWord(a,b){
   }
   return true;
 }
+const tryWord=(a,b)=>tryPath(straightPath(a,b));
 function clearPend(){document.querySelectorAll(".cell.pend").forEach(c=>c.classList.remove("pend"))}
 
 const board=$("board");
+// only count a cell when the finger is near its middle, so diagonal moves don't clip neighbours
+function cellNear(x,y){
+  const el=document.elementFromPoint(x,y);if(!el||!el.classList.contains("cell"))return null;
+  const b=el.getBoundingClientRect(),dx=x-(b.left+b.width/2),dy=y-(b.top+b.height/2);
+  return Math.hypot(dx,dy)<b.width*.42?[+el.dataset.r,+el.dataset.c]:null;
+}
+const same=(a,b)=>a&&b&&a[0]===b[0]&&a[1]===b[1];
 board.addEventListener("pointerdown",e=>{
   ac();
   const p=cellAt(e.clientX,e.clientY);if(!p)return;
   startTimer();
-  drag={a:p,b:p};board.setPointerCapture(e.pointerId);drawLines([...p,...p]);
+  drag={path:[p]};board.setPointerCapture(e.pointerId);drawLines(drag.path);
 });
 board.addEventListener("pointermove",e=>{
-  if(!drag)return;const p=cellAt(e.clientX,e.clientY);if(!p)return;
-  drag.b=snap(drag.a,p);drawLines([...drag.a,...drag.b]);
+  if(!drag)return;const p=cellNear(e.clientX,e.clientY);if(!p)return;
+  const P=drag.path,last=P[P.length-1];
+  if(same(p,last))return;
+  if(P.length>1&&same(p,P[P.length-2])){P.pop();drawLines(P);return}   // going back
+  if(P.some(q=>same(q,p)))return;
+  const dr=p[0]-last[0],dc=p[1]-last[1],adr=Math.abs(dr),adc=Math.abs(dc);
+  const diagOk=G.diag;
+  if(adr<=1&&adc<=1&&(diagOk||!(adr&&adc))){P.push(p)}
+  else if(dr===0||dc===0||(diagOk&&adr===adc)){                      // fast swipe: fill the skipped cells
+    const sr=Math.sign(dr),sc=Math.sign(dc);
+    for(let k=1;k<=Math.max(adr,adc);k++){const q=[last[0]+sr*k,last[1]+sc*k];if(P.some(x=>same(x,q)))break;P.push(q)}
+  }
+  drawLines(P);
 });
 function endDrag(){
-  if(!drag)return;const {a,b}=drag;drag=null;
-  if(a[0]===b[0]&&a[1]===b[1]){
-    if(pend&&!(pend[0]===a[0]&&pend[1]===a[1])){
-      const e2=snap(pend,a);clearPend();const ok=tryWord(pend,e2);pend=null;if(!ok){drawLines();sfx("miss")}return;
+  if(!drag)return;const P=drag.path;drag=null;
+  if(P.length===1){                                // tap the first letter, then the last one
+    const a=P[0];
+    if(pend&&!same(pend,a)){
+      const e2=snap(pend,a);const ok=(e2[0]===pend[0]||e2[1]===pend[1]||G.diag)&&tryWord(pend,e2);
+      clearPend();pend=null;if(!ok){drawLines();sfx("miss")}return;
     }
     clearPend();
     if(pend){pend=null;drawLines();return}
     pend=a;document.querySelector(`.cell[data-r="${a[0]}"][data-c="${a[1]}"]`).classList.add("pend");drawLines();return;
   }
-  pend=null;clearPend();if(!tryWord(a,b)){drawLines();sfx("miss")}
+  pend=null;clearPend();if(!tryPath(P)){drawLines();sfx("miss")}
 }
 board.addEventListener("pointerup",endDrag);
 board.addEventListener("pointercancel",()=>{drag=null;drawLines()});
